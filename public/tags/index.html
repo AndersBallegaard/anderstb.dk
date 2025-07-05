@@ -28,6 +28,20 @@
 
 
 
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-NXN60TES0F"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-NXN60TES0F');
+        }
+      </script>
 <meta property="og:url" content="http://localhost:1313/tags/">
   <meta property="og:site_name" content="Anders Ballegaard">
   <meta property="og:title" content="Tags">
@@ -218,6 +232,13 @@ Tags | Anders Ballegaard
                     
 
                     
+                    <li class="nav-item navbar-text">
+                        <a class="nav-link" href="/#achievements"
+                            aria-label="achievements">
+                            Achievements
+                        </a>
+                    </li>
+                    
 
                     
                     <li class="nav-item navbar-text">
@@ -363,20 +384,19 @@ Tags | Anders Ballegaard
                 
                 <div class="card-header">
                     <a href="/posts/my-first-post/">
-                        <img src="/images/mathjax.png" class="card-img-top" alt="Render Math With Mathjax">
+                        <img src="/images/network.png" class="card-img-top" alt="Sample page">
                     </a>
                 </div>
                 
                 <div class="card-body bg-transparent p-3 shadow-sm">
                     <a href="/posts/my-first-post/" class="primary-font card-title">
-                        <h5 class="card-title bg-transparent" title="Render Math With Mathjax">Render Math With Mathjax</h5>
+                        <h5 class="card-title bg-transparent" title="Sample page">Sample page</h5>
                     </a>
                     <div class="card-text secondary-font">
-                        <p><h2 id="mathjax">Mathjax</h2>
-<p>Math equations can be rendered using <a href="https://www.mathjax.org">Mathjax</a> syntax with AMS symbol support.</p>
-<p>Optionally enable this on a per-page basis by adding <code>mathjax: true</code> to your frontmatter.</p>
-<p>Then, use <code>$$ ... $$</code> on a line by itself to render a block equation:</p>
-<p>$$ | Pr_{x \leftarrow P_{1}} [A(x) = 1] - Pr_{x \leftarrow …</p></p>
+                        <p><h1 id="blog-post-1">Blog post 1</h1>
+<h2 id="mathjax">Mathjax</h2>
+<p>this content is filler</p>
+<pre tabindex="0"><code></code></pre></p>
                     </div>
                 </div>
                 <div class="mt-auto card-footer">
