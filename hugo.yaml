@@ -100,11 +100,11 @@ params:
       enable: true
     # roundImage: true # Make hero image circular | default false
     button:
-      enable: false
+      enable: true
       name: "Resume"
-      url: "#"
-      download: true
-      newPage: false
+      url: "https://www.linkedin.com/in/anders-b/details/experience/"
+      download: false
+      newPage: true
     socialLinks:
       fontAwesomeIcons:
         - icon: fab fa-github
@@ -116,7 +116,7 @@ params:
   about:
     enable: true
     title: "About Me"
-    image: "/images/network.png"
+    image: "/images/avatar.jpeg"
     content: |-
       I am a network engineer at Norlys with a passion for designing and building network automation solutions for complicated networks.
 
@@ -134,18 +134,54 @@ params:
 
   # Experience
   experience:
-    enable: false
+    enable: true
     # title: "Custom Name"
     items:
-      - job: "Senior Software Developer"
-        company: "Facebook"
-        companyUrl: "https://example.com"
-        date: "Jan 2022 - present"
-        featuredLink:
-          enable: true
-          name: "View the project"
-          url: "https://example.com"
-        content: "I am currently working as a software developer at [example org.](https://example.com) in San Francisco, CA. I am currently working on a project that will be used to help people find the best way to get around the city."
+      - job: "Network Engineer"
+        company: "Norlys"
+        companyUrl: "https://norlys.dk/"
+        date: "October 2022 - present"
+        content: |-
+          In this position i work with network development. Some of the things i have been involved with is
+          * Developing and implementing a new national core network
+          * Improving processes and documentation
+          * Develop network automation solutions
+          * Develop new solutions for business customers
+          * Integrate Telia Denmark into Norlys
+      - job: "Network specialist"
+        company: "Region Midtjylland"
+        companyUrl: "https://rm.dk/"
+        date: "November 2021 - September 2022"
+        content: |-
+          My main tasks in this position was:
+          * Build internal tooling for network operations, and security operations
+          * Development and operations of core and datacenter network
+          * Optimize network performance and reliability by analyzing and resolving technical issues, and by improving network security
+          * Took part in datacenter migration projects, from traditional networking, to new datacenters with Cisco ACI based networks.
+          * Designed and implemented fortinet based NGFW solutions
+          * Worked on project based works including redesigning and implementing critical communications networks
+      - job: "Cloud Network Specialist"
+        company: "IT Relation - Now ITM8"
+        companyUrl: "https://itm8.dk/"
+        date: "January 2021 - October 2021"
+        content: |-
+          I worked in IT Relations consulting department as a Network consultant
+          My main tasks in the role was the following:
+          * Design and implementation of new networking solutions.
+          * Troubleshoot and solve customers issues no matter how large or small
+          * Optimize network preformance for customers
+      - job: "Apprentice"
+        company: "Aarhus University"
+        companyUrl: "https://au.dk/"
+        date: "October 2016 - January 2021"
+        content: |-
+          As part of my education (Datatekniner med speciale i Infrastuktur) I had an apprentice position in the Infrastructure department of AU's IT department.
+          While i did a lot of diffrent things thoughout the years, the main tasks where the following:
+          * 2nd level network support
+          * Network operations of access network, firewalls, and MPLS backbone in a large campus network
+          * Continual network improvement and implementation of upgrade
+          * Develop inhouse network automation solutions
+          * Implement off the shelf network automation solutions like DNA Center
   # Education
   education:
     enable: false
