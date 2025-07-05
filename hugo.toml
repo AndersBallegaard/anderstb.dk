@@ -1,7 +1,0 @@
-baseURL = 'https://anderstb.dk/'
-languageCode = 'en-us'
-title = 'Anders Ballegaard'
-theme = 'ananke'
-[caches]
-  [caches.images]
-    dir = ':cacheDir/images'
