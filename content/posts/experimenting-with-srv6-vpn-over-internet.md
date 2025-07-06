@@ -1,6 +1,6 @@
 ---
 date: '2025-07-06T12:51:45+02:00'
-draft: true
+draft: false
 title: 'Experimenting With Srv6 VPN services Over The Internet'
 author: "Anders Ballegaard"
 tags:
@@ -12,33 +12,39 @@ image: /images/content/srv6-vpn/srv6-vpn.png
 description: "The start of a series of posts related to building an ipv6 mostly home network and lab"
 toc: true
 ---
-Ever since learning about SRv6 i have been interested in testing how Srv6 based VPN services work, especially over an uncontrolled network like the Internet. I happend to have a bit of time and energy to play around with it. This post doesn't describe a production ready setup, it's just some notes from playing around and figuring out what is posible, how it works, and getting some ideas for future tinkering.
+Ever since learning about SRv6, I have been interested in testing how SRv6-based VPN services work, especially over an uncontrolled network like the Internet. I happened to have some time and energy to play around with it. This post doesn't describe a production-ready setup; it's just some notes from playing around and figuring out what is possible, how it works, and getting some ideas for future tinkering.
 
 ## What is Segment routing and SRv6?
-Segment routing is a modern aproach to directing traffic. It works over either IPv6 or MPLS, and has a lot of interesting features related to redundancy, traffic engineering, and services.
+Segment routing is a modern approach to directing traffic. It works over either IPv6 or MPLS, and has many interesting features related to redundancy, traffic engineering, and services.
 
-SRv6 is the IPv6 flavor of Segment routing. Unlike SR-MPLS it works over any IPv6 data plane (although you might want more). This flexibility makes it posible to in theory extend SRv6 based services over the Internet, this is the thing we are trying to exploit today. The fact that it's just IPv6 also allows devices that traditionally doesn't support MPLS to be part of the network, like Servers, Phones, etc however we have not geneally seen this in the real world. 
+SRv6 is the IPv6 flavor of segment routing. Unlike SR-MPLS, it works over any IPv6 data plane (although you might want more). This flexibility makes it possible to extend SRv6-based services over the Internet, which is what we're trying to exploit today. The fact that it's just IPv6 also allows devices that traditionally don't support MPLS to be part of the network, like servers, phones, etc., although this isn't generally seen in the real world.
 
-There are a lot of resources to learn much more about Segment routing, i would recormend starting here ***[segment-routing.net](https://www.segment-routing.net/)***
+There are a lot of resources to learn more about segment routing; I would recommend starting with ***[segment-routing.net](https://www.segment-routing.net/)***.
 
 ## About the test setup
-To reduce the number of variables, this test network consists of just two routers, in this case with direct BGP peerings between eachother.
-The routers are based on VyOS 2025.07.06-0022-rolling. 
+To reduce the number of variables, this test network consists of just two routers. I am running VyOS 2025.07.06-0022-rolling on both routers.
+
+Each router is connected to a diffrent interface on a router inside my personal AS201911 network. The interfaces on the ISP router is quite simple, just a linknet and a static route pointing to the VPN router. 
+
+
+![image](/images/content/srv6-vpn/srv6-vpn.png)
 
 | Router | WAN Linknet | Routed prefix | Router ID |
 |--------|-------------|---------------------|---------------------|
 | VPN-Site-A | 2a0e:97c0:ae0:700a::2/64 | 2a0e:97c0:ae6:1000::/56 | 10.1.1.1 |
 | VPN-Site-B | 2a0e:97c0:ae0:700b::2/64 | 2a0e:97c0:ae6:2000::/56 | 10.2.2.2 |
 
-Both routers are part of the ASN 65513, and both have a static ipv6 default route configured towards the ISP.
+Both routers are part of the ASN 65513, and both have a static ipv6 default route configured towards the ISP Router.
 
 ## Setting up SRv6
-insert line for intro
+In a more traditional campus/DC/SP deployment scenario, you would start your SRv6 deployment by deploying an SRv6 capable IGP. However since we are going over the internet, we won't have an IGP. So we are instead starting with BGP.
 
 ### Setting up BGP between the routers
 BGP is already enable on the routers, so we just need to configure peerings, and srv6 options.
 
 Let's start by configuring a peer-group, this should be applied to both routers
+
+There is nothing fancy about this configuration, just a simple iBGP peering, with a password and VPN address families.
 ```
 set protocols bgp peer-group INTERNAL remote-as internal
 set protocols bgp peer-group INTERNAL password CorrectHorseBatteryStable
@@ -80,12 +86,26 @@ set protocols segment-routing srv6 locator VPN-SERVICES prefix 2a0e:97c0:ae6:200
 set protocols bgp srv6 locator VPN-SERVICES
 ```
 
+When a new VPN is created, BGP will take out an address from our VPN-SERVICES prefix and assign that as a destination address for all traffic to the VRF (assuming we want per-vrf "label"). We can either specify the allocation manually, or let BGP figure it out. I feel trusting in BGPs abilities today, so i will auto assign.
 
 ### Building our first L3VPN
 In theory we should now have a BGP peering, a routed prefix, and an SRv6 locator. So the next step is to try using it.
 In this step we will create a VRF, and use that VRF on two dummy interfaces to validate connectivity.
 
 Let's start by defining the VRF
+
+This configuration starts out defining everything that's the same on both sides.
+- The linux kernel routing table ID. If you are comming from Cisco or Juniper this is probably new, but just know linux wants a value it can use internally.
+- Import/Export route targets. Note after we have created the targets we need to tell BGP that it should use it.
+- SID, we are telling BGP to auto allocate a SID.
+- For some reason we need to set system-as and router-id again, i just set it to the same as the global options. I guess this could be a problem if you have a design where your GRT and VPN instance have BGP peerings with eachother.
+- We are redistributing connected, in this example we are putting the VRF on two dummy interfaces, obiviously if this was a real deployment, we might want to redistribute something diffrent.
+- Create a dummy interface and assign it to the VRF.
+
+We also have a few unique things per router, this includes:
+- IP addresses
+- Router ID
+- Route distinguishers.
 ```
 # Shared for both routers
 set vrf name L3VPN-1 table 101
