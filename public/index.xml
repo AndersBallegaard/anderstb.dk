@@ -13,7 +13,7 @@
       <link>http://localhost:1313/posts/ipv6-mostly-home-intro/</link>
       <pubDate>Sat, 05 Jul 2025 22:56:45 +0200</pubDate>
       <guid>http://localhost:1313/posts/ipv6-mostly-home-intro/</guid>
-      <description>&lt;p&gt;I have been a long-time advocate for IPv6. It has been a crucial part of my homelab for years, and through my work at a major Danish ISP, I&amp;rsquo;ve have among other things contributed to enabling and improving IPv6 for many Danish broadband customers.&lt;/p&gt;&#xA;&lt;p&gt;As I&amp;rsquo;m currently updating and fine-tuning some aspects of my homelab, I thought it would be a good idea to document the process here. This will serve as not only personal documentation but also an introduction for anyone interested in setting up their own IPv6 homelab.&lt;/p&gt;</description>
+      <description>&lt;h2 id=&#34;why-should-ipv6-be-a-part-of-a-homelab&#34;&gt;Why Should IPv6 be a part of a homelab?&lt;/h2&gt;&#xA;&lt;p&gt;I have been a long-time advocate for IPv6. It has been a crucial part of my homelab for years, and through my work at a major Danish ISP, I&amp;rsquo;ve have among other things contributed to enabling and improving IPv6 for many Danish broadband customers.&lt;/p&gt;&#xA;&lt;p&gt;As I&amp;rsquo;m currently updating and fine-tuning some aspects of my homelab, I thought it would be a good idea to document the process here. This will serve as not only personal documentation but also an introduction for anyone interested in setting up their own IPv6 homelab.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

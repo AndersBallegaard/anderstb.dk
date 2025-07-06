@@ -12,6 +12,7 @@ image: /images/content/intro-homelab-v6-hero.png
 description: "The start of a series of posts related to building an ipv6 mostly home network and lab"
 toc: true
 ---
+## Why Should IPv6 be a part of a homelab?
 I have been a long-time advocate for IPv6. It has been a crucial part of my homelab for years, and through my work at a major Danish ISP, I've have among other things contributed to enabling and improving IPv6 for many Danish broadband customers.
 
 As I'm currently updating and fine-tuning some aspects of my homelab, I thought it would be a good idea to document the process here. This will serve as not only personal documentation but also an introduction for anyone interested in setting up their own IPv6 homelab.
@@ -45,23 +46,23 @@ Ofcourse companies and goverments isn't just pusing for ipv6 for no reason at al
 So now that you have a glimpse into why you should care about ipv6, I want to encourage you all to start experimenting with ipv6. Whether you're building networks or developing apps, understanding how to work with ipv6 is essential for the future of networking and computing. With ipv6, we can expect simpler routing, decreased latency, improved energy efficiency, and more. By starting to experiment with ipv6 today, you'll be better equipped to handle the challenges and opportunities that come with it.
 
 
-# IPv6 Mostly vs IPv6 Only
+## IPv6 Mostly vs IPv6 Only
 It's probably important to start out defining what I am trying to achieve and what some common terms mean.
 
-## IPv6 Only
+### IPv6 Only
 This is straightforward; it means that you have access only to an IPv6 network. Unless you understand your devices and applications very well, this might not be a good idea right now.
 
 IPv6 only is the ultimate goal, but we aren't there yet. So instead of IPv6 only, most networks are targeting IPv6 mostly as a stepping stone.
 
 Ipv4 connectivity might still be provided for backwards compatibility through NAT64.
 
-## IPv6 Mostly
+### IPv6 Mostly
 This is a defined term; see [IETF draft-ietf-v6ops-6mops-01](https://datatracker.ietf.org/doc/draft-ietf-v6ops-6mops/) for the full version, but here's the short version:
 - The network must work for IPv6 only clients, dual-stack clients, and IPv4 only clients. The goal is to provide a space for migrating clients towards IPv6 only.
 - The network must provide a NAT64 solution to the clients; there is no requirement for providing a DNS64 solution.
 - The network's DHCPv4 server(s) must include DHCP option 108 in responses to clients, indicating to hosts that support IPv6 only that the network also supports IPv6 only. Option 108 essentially lets a device skip getting an IPv4 address.
 
-## My target
+### My target
 My target for now is IPv6 Mostly, and here's why:
 - I own devices that don't support IPv6 or don't support IPv6 only operations.
 - This is the most common deployment method.
@@ -69,7 +70,7 @@ My target for now is IPv6 Mostly, and here's why:
 
 I have chosen IPv6 mostly because it provides a good balance between being forward-thinking and still supporting backwards compatibility with IPv4 networks. While IPv6 only might be the ultimate goal, IPv6 mostly is a more achievable target that can help pave the way for widespread adoption of IPv6 in the future.
 
-# So how do i access ipv4 only sites?
+## So how do i access ipv4 only sites?
 The short answer is NAT64 + either DNS64 or CLAT. I will dedicate a blog post in the future to NAT64, but here's the short version of what it does. Due to IPv6 having more bits than IPv4, we can cram an ipv4 address into an ipv6 address. We traditionally use 64:ff9b::/96 for this, but there are other options. So let's say you wanted to access 1.1.1.1 via NAT64, instead of sending your packet to 1.1.1.1, you would send it to 64:ff9b::101:101 given that is what the address would be if you took the first 96 bits from 64:ff9b:: and added the 32 bits of 1.1.1.1.
 
 But we are (mostly) not accessing services directly by ipv4 address, so we need to map DNS to this mess, somehow. There are two ways this is done
@@ -77,7 +78,7 @@ But we are (mostly) not accessing services directly by ipv4 address, so we need 
 - CLAT aka 464XLAT - This works by having code on the device doing the translation, it's typically implemented as a new ip on an existing interface, or new interface entirely. This is very common in mobile devices, and it is (very slowly) getting implemented on desktop devices. The advantage is that this works for both DNS and IPv4 literals, and it doesn't involve changing DNS responses.
 
 
-# A short introduction to my home network, and what i want to do.
+## A short introduction to my home network, and what i want to do.
 To say that my home network is unusual would be an understatement. Like a lot of people working in IT, I have a sizable homelab, but unlike most others, I have decided to somewhat separate my lab from the rest of the network. Oh and then there is the small detail that I am running my own publicly routed ASN (AS201911), and though that has a /44 IPv6 allocation.
 
 The following is a diagram from earlier this year, of how I wanted the network to look logically. Some of this isn't implemented, but it gives a picture of the direction I have been going
@@ -96,7 +97,7 @@ So what do I want to do with the network?
 - Explore options for a permanent IPv6 only or dual-stacked container platform.
 
 
-# Expected challenges
+## Expected challenges
 If you are starting an IPv6 mostly journey, here are some things to be aware of.
 - Firstly, there are a few popular services using ipv4 literals, most notably Discord. So if you enable option 108 on a device without CLAT, don't be surprised when parts of Discord stops working.
 - You might also find that your ISP doesn't support ipv6, you can of course solve this in the crazy person way and start your own ISP like network, or you could be more sensible, and use something like HE tunnels.
@@ -106,5 +107,5 @@ If you are starting an IPv6 mostly journey, here are some things to be aware of.
 - Some applications you host might listen to 0.0.0.0 instead of [::] (this supports both v4 and v6), if it's an open source project, and you have the ability, please fix it in the project, and try to get it merged.
 
 
-# What is next?
+## What is next?
 My plan is to start looking into diffrent NAT64 options given i have been out of that game for a bit. So look forward to a post comparing different options, and detailing what i will end up doing.

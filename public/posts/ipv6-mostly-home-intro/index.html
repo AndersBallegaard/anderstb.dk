@@ -339,7 +339,8 @@ A Glimpse into the Future: An introduction to IPv6 in your homelab | Anders Ball
           </div>
           
           <article class="page-content  p-2">
-          <p>I have been a long-time advocate for IPv6. It has been a crucial part of my homelab for years, and through my work at a major Danish ISP, I&rsquo;ve have among other things contributed to enabling and improving IPv6 for many Danish broadband customers.</p>
+          <h2 id="why-should-ipv6-be-a-part-of-a-homelab">Why Should IPv6 be a part of a homelab?</h2>
+<p>I have been a long-time advocate for IPv6. It has been a crucial part of my homelab for years, and through my work at a major Danish ISP, I&rsquo;ve have among other things contributed to enabling and improving IPv6 for many Danish broadband customers.</p>
 <p>As I&rsquo;m currently updating and fine-tuning some aspects of my homelab, I thought it would be a good idea to document the process here. This will serve as not only personal documentation but also an introduction for anyone interested in setting up their own IPv6 homelab.</p>
 <p>But why should you care about IPv6? Let&rsquo;s take a look at its current usage.</p>
 <p>Firstly, almost half of all internet traffic is now IPv6. The numbers may vary slightly, but according to reports from Google and Meta, the trend is clear:</p>
@@ -369,20 +370,20 @@ A Glimpse into the Future: An introduction to IPv6 in your homelab | Anders Ball
 </li>
 </ul>
 <p>So now that you have a glimpse into why you should care about ipv6, I want to encourage you all to start experimenting with ipv6. Whether you&rsquo;re building networks or developing apps, understanding how to work with ipv6 is essential for the future of networking and computing. With ipv6, we can expect simpler routing, decreased latency, improved energy efficiency, and more. By starting to experiment with ipv6 today, you&rsquo;ll be better equipped to handle the challenges and opportunities that come with it.</p>
-<h1 id="ipv6-mostly-vs-ipv6-only">IPv6 Mostly vs IPv6 Only</h1>
+<h2 id="ipv6-mostly-vs-ipv6-only">IPv6 Mostly vs IPv6 Only</h2>
 <p>It&rsquo;s probably important to start out defining what I am trying to achieve and what some common terms mean.</p>
-<h2 id="ipv6-only">IPv6 Only</h2>
+<h3 id="ipv6-only">IPv6 Only</h3>
 <p>This is straightforward; it means that you have access only to an IPv6 network. Unless you understand your devices and applications very well, this might not be a good idea right now.</p>
 <p>IPv6 only is the ultimate goal, but we aren&rsquo;t there yet. So instead of IPv6 only, most networks are targeting IPv6 mostly as a stepping stone.</p>
 <p>Ipv4 connectivity might still be provided for backwards compatibility through NAT64.</p>
-<h2 id="ipv6-mostly">IPv6 Mostly</h2>
+<h3 id="ipv6-mostly">IPv6 Mostly</h3>
 <p>This is a defined term; see <a href="https://datatracker.ietf.org/doc/draft-ietf-v6ops-6mops/">IETF draft-ietf-v6ops-6mops-01</a> for the full version, but here&rsquo;s the short version:</p>
 <ul>
 <li>The network must work for IPv6 only clients, dual-stack clients, and IPv4 only clients. The goal is to provide a space for migrating clients towards IPv6 only.</li>
 <li>The network must provide a NAT64 solution to the clients; there is no requirement for providing a DNS64 solution.</li>
 <li>The network&rsquo;s DHCPv4 server(s) must include DHCP option 108 in responses to clients, indicating to hosts that support IPv6 only that the network also supports IPv6 only. Option 108 essentially lets a device skip getting an IPv4 address.</li>
 </ul>
-<h2 id="my-target">My target</h2>
+<h3 id="my-target">My target</h3>
 <p>My target for now is IPv6 Mostly, and here&rsquo;s why:</p>
 <ul>
 <li>I own devices that don&rsquo;t support IPv6 or don&rsquo;t support IPv6 only operations.</li>
@@ -390,14 +391,14 @@ A Glimpse into the Future: An introduction to IPv6 in your homelab | Anders Ball
 <li>It doesn&rsquo;t limit me from running some devices as IPv6 only for testing purposes.</li>
 </ul>
 <p>I have chosen IPv6 mostly because it provides a good balance between being forward-thinking and still supporting backwards compatibility with IPv4 networks. While IPv6 only might be the ultimate goal, IPv6 mostly is a more achievable target that can help pave the way for widespread adoption of IPv6 in the future.</p>
-<h1 id="so-how-do-i-access-ipv4-only-sites">So how do i access ipv4 only sites?</h1>
+<h2 id="so-how-do-i-access-ipv4-only-sites">So how do i access ipv4 only sites?</h2>
 <p>The short answer is NAT64 + either DNS64 or CLAT. I will dedicate a blog post in the future to NAT64, but here&rsquo;s the short version of what it does. Due to IPv6 having more bits than IPv4, we can cram an ipv4 address into an ipv6 address. We traditionally use 64:ff9b::/96 for this, but there are other options. So let&rsquo;s say you wanted to access 1.1.1.1 via NAT64, instead of sending your packet to 1.1.1.1, you would send it to 64:ff9b::101:101 given that is what the address would be if you took the first 96 bits from 64:ff9b:: and added the 32 bits of 1.1.1.1.</p>
 <p>But we are (mostly) not accessing services directly by ipv4 address, so we need to map DNS to this mess, somehow. There are two ways this is done</p>
 <ul>
 <li>DNS64 - This is essentially the DNS server lying to the client, by creating a fake AAAA record though the NAT64 device if no AAAAs exist for that domain. But given the DNS server is lying to the client, DNSSEC doesn&rsquo;t like DNS64. The advantage is that it works on any device that supports IPv6. But it only works for DNS, so any IPv4 literals won&rsquo;t be saved by this. Another indirect consequence of this approach is that sites with AAAA records, but broken ipv6 doesn&rsquo;t have any way to fall back to the ipv4 connectivity.</li>
 <li>CLAT aka 464XLAT - This works by having code on the device doing the translation, it&rsquo;s typically implemented as a new ip on an existing interface, or new interface entirely. This is very common in mobile devices, and it is (very slowly) getting implemented on desktop devices. The advantage is that this works for both DNS and IPv4 literals, and it doesn&rsquo;t involve changing DNS responses.</li>
 </ul>
-<h1 id="a-short-introduction-to-my-home-network-and-what-i-want-to-do">A short introduction to my home network, and what i want to do.</h1>
+<h2 id="a-short-introduction-to-my-home-network-and-what-i-want-to-do">A short introduction to my home network, and what i want to do.</h2>
 <p>To say that my home network is unusual would be an understatement. Like a lot of people working in IT, I have a sizable homelab, but unlike most others, I have decided to somewhat separate my lab from the rest of the network. Oh and then there is the small detail that I am running my own publicly routed ASN (AS201911), and though that has a /44 IPv6 allocation.</p>
 <p>The following is a diagram from earlier this year, of how I wanted the network to look logically. Some of this isn&rsquo;t implemented, but it gives a picture of the direction I have been going
 <img src="/images/content/ipv6-series/logical-network-diagram-2025.svg" alt="Network diagram"></p>
@@ -411,7 +412,7 @@ A Glimpse into the Future: An introduction to IPv6 in your homelab | Anders Ball
 <li>Explore running CLAT on Linux servers.</li>
 <li>Explore options for a permanent IPv6 only or dual-stacked container platform.</li>
 </ul>
-<h1 id="expected-challenges">Expected challenges</h1>
+<h2 id="expected-challenges">Expected challenges</h2>
 <p>If you are starting an IPv6 mostly journey, here are some things to be aware of.</p>
 <ul>
 <li>Firstly, there are a few popular services using ipv4 literals, most notably Discord. So if you enable option 108 on a device without CLAT, don&rsquo;t be surprised when parts of Discord stops working.</li>
@@ -421,7 +422,7 @@ A Glimpse into the Future: An introduction to IPv6 in your homelab | Anders Ball
 <li>Containers and ipv6 - Generally not a good time, although it can be in some cases.</li>
 <li>Some applications you host might listen to 0.0.0.0 instead of [::] (this supports both v4 and v6), if it&rsquo;s an open source project, and you have the ability, please fix it in the project, and try to get it merged.</li>
 </ul>
-<h1 id="what-is-next">What is next?</h1>
+<h2 id="what-is-next">What is next?</h2>
 <p>My plan is to start looking into diffrent NAT64 options given i have been out of that game for a bit. So look forward to a post comparing different options, and detailing what i will end up doing.</p>
 
           </article>
@@ -437,9 +438,18 @@ A Glimpse into the Future: An introduction to IPv6 in your homelab | Anders Ball
               <div class="toc-content">
                 <nav id="TableOfContents">
   <ul>
-    <li><a href="#ipv6-only">IPv6 Only</a></li>
-    <li><a href="#ipv6-mostly">IPv6 Mostly</a></li>
-    <li><a href="#my-target">My target</a></li>
+    <li><a href="#why-should-ipv6-be-a-part-of-a-homelab">Why Should IPv6 be a part of a homelab?</a></li>
+    <li><a href="#ipv6-mostly-vs-ipv6-only">IPv6 Mostly vs IPv6 Only</a>
+      <ul>
+        <li><a href="#ipv6-only">IPv6 Only</a></li>
+        <li><a href="#ipv6-mostly">IPv6 Mostly</a></li>
+        <li><a href="#my-target">My target</a></li>
+      </ul>
+    </li>
+    <li><a href="#so-how-do-i-access-ipv4-only-sites">So how do i access ipv4 only sites?</a></li>
+    <li><a href="#a-short-introduction-to-my-home-network-and-what-i-want-to-do">A short introduction to my home network, and what i want to do.</a></li>
+    <li><a href="#expected-challenges">Expected challenges</a></li>
+    <li><a href="#what-is-next">What is next?</a></li>
   </ul>
 </nav>
               </div>
@@ -581,8 +591,9 @@ A Glimpse into the Future: An introduction to IPv6 in your homelab | Anders Ball
                         <h5 class="card-title bg-transparent" title="A Glimpse into the Future: An introduction to IPv6 in your homelab">A Glimpse into the …</h5>
                     </a>
                     <div class="card-text secondary-font">
-                        <p><p>I have been a long-time advocate for IPv6. It has been a crucial part of my homelab for years, and through my work at a major Danish ISP, I&rsquo;ve have among other things contributed to enabling and improving IPv6 for many Danish broadband customers.</p>
-<p>As I&rsquo;m currently updating and fine-tuning …</p></p>
+                        <p><h2 id="why-should-ipv6-be-a-part-of-a-homelab">Why Should IPv6 be a part of a homelab?</h2>
+<p>I have been a long-time advocate for IPv6. It has been a crucial part of my homelab for years, and through my work at a major Danish ISP, I&rsquo;ve have among other things contributed to enabling and improving IPv6 for many Danish broadband customers.</p>
+<p>As …</p></p>
                     </div>
                 </div>
                 <div class="mt-auto card-footer">
