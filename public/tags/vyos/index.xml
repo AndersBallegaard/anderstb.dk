@@ -1,26 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Anders Ballegaard</title>
-    <link>http://localhost:1313/</link>
-    <description>Recent content on Anders Ballegaard</description>
+    <title>Vyos on Anders Ballegaard</title>
+    <link>http://localhost:1313/tags/vyos/</link>
+    <description>Recent content in Vyos on Anders Ballegaard</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 06 Jul 2025 09:05:08 +0200</lastBuildDate>
-    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/tags/vyos/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Nat64 for the Homelab</title>
       <link>http://localhost:1313/posts/nat64-for-the-homelab/</link>
       <pubDate>Sun, 06 Jul 2025 09:05:08 +0200</pubDate>
       <guid>http://localhost:1313/posts/nat64-for-the-homelab/</guid>
       <description>&lt;h1 id=&#34;writing-guide&#34;&gt;Writing guide&lt;/h1&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Done - Intro with refrence to previous post&lt;/li&gt;&#xA;&lt;li&gt;Done - What is nat64 and why do we need it?&lt;/li&gt;&#xA;&lt;li&gt;Done - How does nat64 work?&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Common concepts accross all nat64 implementations&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Address translation&lt;/li&gt;&#xA;&lt;li&gt;Common prefix&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;What can differ&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;Done - Client interaction with NAT64&#xA;&lt;ul&gt;&#xA;&lt;li&gt;464XLAT&lt;/li&gt;&#xA;&lt;li&gt;DNS64&lt;/li&gt;&#xA;&lt;li&gt;Nat64 prefix discovery&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;Done - Comparison of diffrent NAT64 implementations&lt;/li&gt;&#xA;&lt;li&gt;Setup of my chosen implementation&#xA;&lt;ul&gt;&#xA;&lt;li&gt;My requirements for a nat64 solution&lt;/li&gt;&#xA;&lt;li&gt;My choice (NAT64 + client side)&lt;/li&gt;&#xA;&lt;li&gt;Setting up the implementation&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h1 id=&#34;content&#34;&gt;Content&lt;/h1&gt;&#xA;&lt;p&gt;As discussed in &lt;em&gt;&lt;strong&gt;&lt;a href=&#34;http://localhost:1313/posts/ipv6-mostly-home-intro/&#34;&gt;the previous post&lt;/a&gt;&lt;/strong&gt;&lt;/em&gt;, I am currently making some modifications to my homelab. In as a part of this process, I am looking at NAT64 solutions again. I am currently running Tayga on OpnSense, but want to move to NAT64 to a dedicated VM. This post will be going through what NAT64 is, how clients interact with it, a comparison of diffrent implementations and finally setting up my chosen implementation.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>A Glimpse into the Future: An introduction to IPv6 in your homelab</title>
-      <link>http://localhost:1313/posts/ipv6-mostly-home-intro/</link>
-      <pubDate>Sat, 05 Jul 2025 22:56:45 +0200</pubDate>
-      <guid>http://localhost:1313/posts/ipv6-mostly-home-intro/</guid>
-      <description>&lt;h2 id=&#34;why-should-ipv6-be-a-part-of-a-homelab&#34;&gt;Why Should IPv6 be a part of a homelab?&lt;/h2&gt;&#xA;&lt;p&gt;I have been a long-time advocate for IPv6. It has been a crucial part of my homelab for years, and through my work at a major Danish ISP, I&amp;rsquo;ve have among other things contributed to enabling and improving IPv6 for many Danish broadband customers.&lt;/p&gt;&#xA;&lt;p&gt;As I&amp;rsquo;m currently updating and fine-tuning some aspects of my homelab, I thought it would be a good idea to document the process here. This will serve as not only personal documentation but also an introduction for anyone interested in setting up their own IPv6 homelab.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

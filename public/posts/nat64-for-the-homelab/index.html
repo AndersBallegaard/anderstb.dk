@@ -42,24 +42,25 @@
           gtag('config', 'G-NXN60TES0F');
         }
       </script>
-<meta property="og:url" content="http://localhost:1313/posts/ipv6-mostly-home-intro/">
+<meta property="og:url" content="http://localhost:1313/posts/nat64-for-the-homelab/">
   <meta property="og:site_name" content="Anders Ballegaard">
-  <meta property="og:title" content="A Glimpse into the Future: An introduction to IPv6 in your homelab">
-  <meta property="og:description" content="The start of a series of posts related to building an ipv6 mostly home network and lab">
+  <meta property="og:title" content="Nat64 for the Homelab">
+  <meta property="og:description" content="An comparison of diffrent NAT64 options, and an introduction to NAT64 related concepts">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2025-07-05T22:56:45+02:00">
-    <meta property="article:modified_time" content="2025-07-05T22:56:45+02:00">
+    <meta property="article:published_time" content="2025-07-06T09:05:08+02:00">
+    <meta property="article:modified_time" content="2025-07-06T09:05:08+02:00">
     <meta property="article:tag" content="IPv6">
     <meta property="article:tag" content="NAT64">
     <meta property="article:tag" content="Homelab">
     <meta property="article:tag" content="Home Network">
+    <meta property="article:tag" content="Vyos">
 
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="A Glimpse into the Future: An introduction to IPv6 in your homelab">
-  <meta name="twitter:description" content="The start of a series of posts related to building an ipv6 mostly home network and lab">
+  <meta name="twitter:title" content="Nat64 for the Homelab">
+  <meta name="twitter:description" content="An comparison of diffrent NAT64 options, and an introduction to NAT64 related concepts">
 
 
 <link rel="stylesheet" href="/bootstrap-5/css/bootstrap.min.css" media="all"><link rel="stylesheet" href="/css/header.css" media="all">
@@ -123,7 +124,7 @@
 
 
 
-<meta name="description" content="The start of a series of posts related to building an ipv6 mostly home network and lab">
+<meta name="description" content="An comparison of diffrent NAT64 options, and an introduction to NAT64 related concepts">
 <link rel="stylesheet" href="/css/single.css">
 
 
@@ -134,7 +135,7 @@
   
 
   <title>
-A Glimpse into the Future: An introduction to IPv6 in your homelab | Anders Ballegaard
+Nat64 for the Homelab | Anders Ballegaard
 
   </title>
 </head>
@@ -318,13 +319,13 @@ A Glimpse into the Future: An introduction to IPv6 in your homelab | Anders Ball
       <div class="col-sm-12 col-md-12 col-lg-9">
         <div class="pr-lg-4">
           <div class="title mb-5">
-            <h1 class="text-center mb-4">A Glimpse into the Future: An introduction to IPv6 in your homelab</h1>
+            <h1 class="text-center mb-4">Nat64 for the Homelab</h1>
             <div class="text-center">
               
                 Anders Ballegaard
                 <small>|</small>
               
-              Jul 5, 2025
+              Jul 6, 2025
 
               
               <span id="readingTime">
@@ -335,96 +336,98 @@ A Glimpse into the Future: An introduction to IPv6 in your homelab | Anders Ball
           </div>
           
           <div class="featured-image">
-            <img class="img-fluid mx-auto d-block" src="/images/content/intro-homelab-v6-hero.png" alt="A Glimpse into the Future: An introduction to IPv6 in your homelab">
+            <img class="img-fluid mx-auto d-block" src="/images/content/ipv6-series/DNS64_flow.png" alt="Nat64 for the Homelab">
           </div>
           
           <article class="page-content  p-2">
-          <h2 id="why-should-ipv6-be-a-part-of-a-homelab">Why Should IPv6 be a part of a homelab?</h2>
-<p>I have been a long-time advocate for IPv6. It has been a crucial part of my homelab for years, and through my work at a major Danish ISP, I&rsquo;ve have among other things contributed to enabling and improving IPv6 for many Danish broadband customers.</p>
-<p>As I&rsquo;m currently updating and fine-tuning some aspects of my homelab, I thought it would be a good idea to document the process here. This will serve as not only personal documentation but also an introduction for anyone interested in setting up their own IPv6 homelab.</p>
-<p>But why should you care about IPv6? Let&rsquo;s take a look at its current usage.</p>
-<p>Firstly, almost half of all internet traffic is now IPv6. The numbers may vary slightly, but according to reports from Google and Meta, the trend is clear:</p>
-<p><img src="/images/content/ipv6-series/google-stats.png" alt="google ipv6 stats">
-<a href="https://www.google.com/intl/en/ipv6/statistics.html">Source</a>
-<img src="/images/content/ipv6-series/meta-stats.png" alt="meta ipv6 stats">
-<a href="https://www.facebook.com/ipv6/?tab=ipv6_total_adoption">Source</a></p>
-<p>Besides the fact that a large portion of the internet is already using IPv6, there are also pushes from both companies and goverments to move to ipv6. Some of those major pushes include:</p>
+          <h1 id="writing-guide">Writing guide</h1>
 <ul>
-<li>Apple requires all app store apps to support working in IPv6-only networks. They have required this since 2016.</li>
-<li>Several mobile operators have deployed IPv6-only mobile networks, with 464XLAT being the only way of accessing IPv4 sites. In the West, the most notable example is probably T-Mobile in the US. However, to my knowledge, this approach is also common in developing countries due to IPv4 scarcity.</li>
-<li>The US Office of Management and Budget has implemented an IPv6 mandate. In 2023, the US federal government presented a quite ambitious plan for moving to IPv6.</li>
-<li>China has mandated that Chinese router manufacturers must enable IPv6 by default in all new routers they sell.</li>
-<li>Most major cloud providers have started not including public IPv4 addresses for free, thus adding an extra cost for still running IPv4 directly on servers. While this does not force organizations to change, it is a nudge that can be used as a motivator.</li>
+<li>Done - Intro with refrence to previous post</li>
+<li>Done - What is nat64 and why do we need it?</li>
+<li>Done - How does nat64 work?
+<ul>
+<li>Common concepts accross all nat64 implementations
+<ul>
+<li>Address translation</li>
+<li>Common prefix</li>
 </ul>
-<p>Ofcourse companies and goverments isn&rsquo;t just pusing for ipv6 for no reason at all. It takes a lot of effort to change, so there needs to be some good reasons behind the change. So here are some of the reasons:</p>
+</li>
+<li>What can differ</li>
+</ul>
+</li>
+<li>Done - Client interaction with NAT64
 <ul>
-<li>We are running out of IPv4 address space. Part of this problem is related to the fact that early IPv4 allocation was made in a very shortsighted way; unfortunately, there isn&rsquo;t really a way to change this. (And no Class E or redefining 127.0.0.0/8 won&rsquo;t work.) Unlike many IPv6 supporters, I don&rsquo;t like to say we have run out, but instead say we are running out. While it is true that getting new IPv4 space directly from your RIR is impossible (or close to it), there is still a healthy resale market. So you can get IPv4 space, but supply and demand makes a pure IPv4-only internet an impossibility now due to the amount of things we want connected.</li>
-<li>Simpler routing and network operations are two benefits of IPv6. This might sound counterintuitive for anyone who has grown up with IPv4 networks, and I do admit it takes some time getting used to. But once you see the beauty in always using /64 netmasks without having to worry about exhaustion, or when you start to appreciate the simplicity of not dealing with NAT when troubleshooting, or realize the simplicity of the (base) IPv6 header compared to IPv4&rsquo;s, you&rsquo;ll understand what I mean. Like all things, there is a learning curve, and the more time you have spent with IPv4, the harder it probably is; but the more you use IPv6, the easier it becomes, and the more you will love it.</li>
-<li>Decreased latency is another benefit of IPv6. Removing NAT on the internet does decrease latency, especially if your ISP forces you through CGNAT routers placed outside the optimal network path. In some cases, we also see a decreased latency due to cutting out legacy infrastructure that only supports IPv4.</li>
-<li>Energy efficiency is also a benefit of IPv6. Kinda the same as latency, removing NAT removes compute cycles to do NAT and decreases power consumption.</li>
-<li>The use of extension headers enables several key protocol improvements, including:
+<li>464XLAT</li>
+<li>DNS64</li>
+<li>Nat64 prefix discovery</li>
+</ul>
+</li>
+<li>Done - Comparison of diffrent NAT64 implementations</li>
+<li>Setup of my chosen implementation
 <ul>
-<li>Routing header: This allows the source device to specify the path it wants to take through the network. A very cool application of this is SRv6 routing.</li>
-<li>IPsec header: This allows for encryption and authentication of packets built directly into the IP protocol, instead of as an additional layer like it is in IPv4.</li>
+<li>My requirements for a nat64 solution</li>
+<li>My choice (NAT64 + client side)</li>
+<li>Setting up the implementation</li>
 </ul>
 </li>
 </ul>
-<p>So now that you have a glimpse into why you should care about ipv6, I want to encourage you all to start experimenting with ipv6. Whether you&rsquo;re building networks or developing apps, understanding how to work with ipv6 is essential for the future of networking and computing. With ipv6, we can expect simpler routing, decreased latency, improved energy efficiency, and more. By starting to experiment with ipv6 today, you&rsquo;ll be better equipped to handle the challenges and opportunities that come with it.</p>
-<h2 id="ipv6-mostly-vs-ipv6-only">IPv6 Mostly vs IPv6 Only</h2>
-<p>It&rsquo;s probably important to start out defining what I am trying to achieve and what some common terms mean.</p>
-<h3 id="ipv6-only">IPv6 Only</h3>
-<p>This is straightforward; it means that you have access only to an IPv6 network. Unless you understand your devices and applications very well, this might not be a good idea right now.</p>
-<p>IPv6 only is the ultimate goal, but we aren&rsquo;t there yet. So instead of IPv6 only, most networks are targeting IPv6 mostly as a stepping stone.</p>
-<p>Ipv4 connectivity might still be provided for backwards compatibility through NAT64.</p>
-<h3 id="ipv6-mostly">IPv6 Mostly</h3>
-<p>This is a defined term; see <a href="https://datatracker.ietf.org/doc/draft-ietf-v6ops-6mops/">IETF draft-ietf-v6ops-6mops-01</a> for the full version, but here&rsquo;s the short version:</p>
+<h1 id="content">Content</h1>
+<p>As discussed in <em><strong><a href="/posts/ipv6-mostly-home-intro/">the previous post</a></strong></em>, I am currently making some modifications to my homelab. In as a part of this process, I am looking at NAT64 solutions again. I am currently running Tayga on OpnSense, but want to move to NAT64 to a dedicated VM. This post will be going through what NAT64 is, how clients interact with it, a comparison of diffrent implementations and finally setting up my chosen implementation.</p>
+<h2 id="what-is-nat64-and-why-do-we-need-it">What is NAT64 and why do we need it?</h2>
+<p>We need NAT64 in IPv6 mostly and IPv6 only networks because there are still many sites and services on the internet that don&rsquo;t support IPv6. NAT64 solves this by mapping every single IPv4 address to a unique IPv6 address, which can be used for communication with those addresses.</p>
+<p>This ofcourse doesn&rsquo;t magicly fix client devices that doesn&rsquo;t support IPv6, but it enables devices with IPv6 support to start going IPv6 only. Mobile devices, and some desktop operating systems (primarily macOS) support IPv6 only operations particularly well, due to having built in CLAT implementations. But we will dive deen into this later.</p>
+<h2 id="how-does-nat64-work">How does NAT64 work?</h2>
+<p>All NAT64 implementations map an ipv6 address into a /96 IPv6 prefix. Given that IPv6 addresses are 128 bits, and IPv4 addresses are 32 bits, the mapping is done by taking every single bit of the IPv4 address and adding it to the end of the IPv6 address. This means that for example an ipv4 address &lsquo;1.1.1.1&rsquo; could become &lsquo;64:ff9b::101:101&rsquo;, or &lsquo;96.7.128.175&rsquo; becomes &lsquo;64:ff9b::6007:80af&rsquo;.</p>
+<p>But where does the 64:ff9b:: come from? Well, you can technically use any /96 IPv6 prefix, but 64:ff9b::/96 is reserved to NAT64. Using 64:ff9b::/96 does have some pros and cons:</p>
 <ul>
-<li>The network must work for IPv6 only clients, dual-stack clients, and IPv4 only clients. The goal is to provide a space for migrating clients towards IPv6 only.</li>
-<li>The network must provide a NAT64 solution to the clients; there is no requirement for providing a DNS64 solution.</li>
-<li>The network&rsquo;s DHCPv4 server(s) must include DHCP option 108 in responses to clients, indicating to hosts that support IPv6 only that the network also supports IPv6 only. Option 108 essentially lets a device skip getting an IPv4 address.</li>
+<li>If you want to use publicly avalible DNS64 services, this is the prefix they assume your NAT64 implementation will be using.</li>
+<li>It is obvious that traffic is going through NAT64 if you see an 64:ff9b::/96 address.</li>
+<li>Some NAT64 implementations might not allow translating traffic to RFC1918 destinations, if you are using 64:ff9b::/96</li>
 </ul>
-<h3 id="my-target">My target</h3>
-<p>My target for now is IPv6 Mostly, and here&rsquo;s why:</p>
+<p>There can be some diffrences between NAT64 implementations, but we will look more at that in the comparison section below. For homelab purposes i would also argue it makes quite a diffrence if you are managing the NAT64 software directly, or if you are using it as part of an intigrated solution like running NAT64 in OpnSense.</p>
+<h2 id="client-interaction-with-nat64">Client interaction with NAT64</h2>
+<p>It might be worth briefly looking at how clients interact with NAT64 before looking at the solutions themself. The two main ways are DNS64 or CLAT. These are not nessearily mutraly exclusive, and can be used in combination.</p>
+<h3 id="dns64">DNS64</h3>
+<p>DNS64 essentially works by lying to the client, The DNS server sends A and AAAA queries for a given domain. If no AAAA record is found, it maps the A record address into a NAT64 address, for this reason it is very important that the DNS64 server knows the correct NAT64 prefix.
+<img src="/images/content/ipv6-series/DNS64_flow.png" alt="DNS64"></p>
+<p>The advantage of using DNS64 is quite clear, it doesn&rsquo;t require any changes to your clients. But there are unfortunately a few drawbacks:</p>
 <ul>
-<li>I own devices that don&rsquo;t support IPv6 or don&rsquo;t support IPv6 only operations.</li>
-<li>This is the most common deployment method.</li>
-<li>It doesn&rsquo;t limit me from running some devices as IPv6 only for testing purposes.</li>
+<li>If used standalone without CLAT on the clients, it doesn&rsquo;t offer any fallback in case a service has a AAAA record, but the IPv6 implementation of the site for some reason doesn&rsquo;t work. To be fair, this is not a flaw in DNS64 itself, but just a consequence of purely relying on DNS64.</li>
+<li>It doesn&rsquo;t offer any way of translating IPv4 littrals. While generally not a huge problem, it is a problem in some cases, most notably Discord voice chat.</li>
+<li>If your endpoints are doing DNSSEC validation, it will detect that the DNS server is lying to you and reject the response.</li>
 </ul>
-<p>I have chosen IPv6 mostly because it provides a good balance between being forward-thinking and still supporting backwards compatibility with IPv4 networks. While IPv6 only might be the ultimate goal, IPv6 mostly is a more achievable target that can help pave the way for widespread adoption of IPv6 in the future.</p>
-<h2 id="so-how-do-i-access-ipv4-only-sites">So how do i access ipv4 only sites?</h2>
-<p>The short answer is NAT64 + either DNS64 or CLAT. I will dedicate a blog post in the future to NAT64, but here&rsquo;s the short version of what it does. Due to IPv6 having more bits than IPv4, we can cram an ipv4 address into an ipv6 address. We traditionally use 64:ff9b::/96 for this, but there are other options. So let&rsquo;s say you wanted to access 1.1.1.1 via NAT64, instead of sending your packet to 1.1.1.1, you would send it to 64:ff9b::101:101 given that is what the address would be if you took the first 96 bits from 64:ff9b:: and added the 32 bits of 1.1.1.1.</p>
-<p>But we are (mostly) not accessing services directly by ipv4 address, so we need to map DNS to this mess, somehow. There are two ways this is done</p>
+<h3 id="464xlat">464XLAT</h3>
+<p>464XLAT introduces a new component, a Customer site translater called CLAT. The CLAT is most often located on the endpoint device itself, but it doesn&rsquo;t have to be. If as an example you have 5G router on an IPv6 Only mobile network, you probably have a CLAT function built into your router. CLAT essentially just allows the translation of IPv4 packets into IPv6 packets using the NAT64 prefix.
+<img src="/images/content/ipv6-series/464xlat.png" alt="464XLAT"></p>
+<p>The pros of this is that IPv4 works no matter if you have DNSSEC, IPv4 littrals, or whatever else. The cons are that it requires a new component usually located on the endpoint device itself.
+Mobile devices generally have very good CLAT implementations, apple have also included the Iphones CLAT implementation in macOS. Microsoft have commited to CLAT for all network types in Windows 11, but they commited to that over a year ago, and we haven&rsquo;t heard anything since.</p>
+<p>But how do CLAT implementations even know what NAT64 prefix to use? There are generally two ways of doing this.</p>
 <ul>
-<li>DNS64 - This is essentially the DNS server lying to the client, by creating a fake AAAA record though the NAT64 device if no AAAAs exist for that domain. But given the DNS server is lying to the client, DNSSEC doesn&rsquo;t like DNS64. The advantage is that it works on any device that supports IPv6. But it only works for DNS, so any IPv4 literals won&rsquo;t be saved by this. Another indirect consequence of this approach is that sites with AAAA records, but broken ipv6 doesn&rsquo;t have any way to fall back to the ipv4 connectivity.</li>
-<li>CLAT aka 464XLAT - This works by having code on the device doing the translation, it&rsquo;s typically implemented as a new ip on an existing interface, or new interface entirely. This is very common in mobile devices, and it is (very slowly) getting implemented on desktop devices. The advantage is that this works for both DNS and IPv4 literals, and it doesn&rsquo;t involve changing DNS responses.</li>
+<li>The first and preferred way is to use PREF64 router advertisements. This option needs to be implemented per endpoint network, but it enables the router to inform the client about the NAT64 prefix when announcing the IPv6 router information.</li>
+<li>Another way is using DNS64. This requires the client to lookup a AAAA record for ipv4only.arpa. Per RFC7050 the response for ipv4only.arpa should be 192.0.0.170/192.0.0.171. So AAAA response would indicate NAT64 is implemted. The NAT64 prefix is found by taking the first 96 bits of the IPv6 address in the response, and using that as the NAT64 prefix. It is worth noting that the IETF is working on deprecating this method, recormending the use of PREF64 instead.</li>
 </ul>
-<h2 id="a-short-introduction-to-my-home-network-and-what-i-want-to-do">A short introduction to my home network, and what i want to do.</h2>
-<p>To say that my home network is unusual would be an understatement. Like a lot of people working in IT, I have a sizable homelab, but unlike most others, I have decided to somewhat separate my lab from the rest of the network. Oh and then there is the small detail that I am running my own publicly routed ASN (AS201911), and though that has a /44 IPv6 allocation.</p>
-<p>The following is a diagram from earlier this year, of how I wanted the network to look logically. Some of this isn&rsquo;t implemented, but it gives a picture of the direction I have been going
-<img src="/images/content/ipv6-series/logical-network-diagram-2025.svg" alt="Network diagram"></p>
-<p>I will fully acknowledge that best practice is an unknown concept in this rat&rsquo;s nest of a network. But my goals have never been to create something that made sense; it has been to create something that gave me the flexibility I wanted to do whatever I want with limited impact on other parts of the network. Besides that, I just like BGP, and wanted more BGP in my home network.</p>
-<p>I don&rsquo;t have a public IPv4 address for my home network, so everything I expose is exposed through IPv6 only, mostly with Cloudflare proxy in front of the service, both to protect the service, and to enable dual-stack access through Cloudflare&rsquo;s proxy service.</p>
-<p>All routers you see in the diagram are either OpnSense firewalls or VYOS routers.</p>
-<p>So what do I want to do with the network?</p>
-<ul>
-<li>Create a centralized NAT64 service. Right now, the DKNIM-LFW cluster, and DKNIM-HFW clusters are both running NAT64; I would like to centralize this.</li>
-<li>Enable option 108 on all networks with DHCP. A lot should already have it, but it&rsquo;s not enabled everywhere.</li>
-<li>Explore running CLAT on Linux servers.</li>
-<li>Explore options for a permanent IPv6 only or dual-stacked container platform.</li>
-</ul>
-<h2 id="expected-challenges">Expected challenges</h2>
-<p>If you are starting an IPv6 mostly journey, here are some things to be aware of.</p>
-<ul>
-<li>Firstly, there are a few popular services using ipv4 literals, most notably Discord. So if you enable option 108 on a device without CLAT, don&rsquo;t be surprised when parts of Discord stops working.</li>
-<li>You might also find that your ISP doesn&rsquo;t support ipv6, you can of course solve this in the crazy person way and start your own ISP like network, or you could be more sensible, and use something like HE tunnels.</li>
-<li>IOT devices generally don&rsquo;t have great ipv6 support.</li>
-<li>If you are used to doing music streaming from your phone to maybe a Sonos speaker, that might break with option 108, given that Sonos doesn&rsquo;t support ipv6, and your phone most likely won&rsquo;t have an ipv4 address.</li>
-<li>Containers and ipv6 - Generally not a good time, although it can be in some cases.</li>
-<li>Some applications you host might listen to 0.0.0.0 instead of [::] (this supports both v4 and v6), if it&rsquo;s an open source project, and you have the ability, please fix it in the project, and try to get it merged.</li>
-</ul>
-<h2 id="what-is-next">What is next?</h2>
-<p>My plan is to start looking into diffrent NAT64 options given i have been out of that game for a bit. So look forward to a post comparing different options, and detailing what i will end up doing.</p>
-
+<h3 id="comparing-nat64-implementations">Comparing NAT64 implementations</h3>
+<p>I will focusing mostly on NAT64 implementations that are free, and easy to implement. So yes you could ask Cisco/F5/Juniper/etc for a NAT64 implementation, solution. But not everyone has access to that.</p>
+<p>I do however have a cisco router in my homelab, so i will include that just because i could use it.</p>
+<h4 id="tayga">Tayga</h4>
+<p>I am currently using Tayga inside OpnSense and it has worked fine for me. From what i remember this was generally the recormended solution back when i last researched NAT64. It seems like it&rsquo;s not the best option for performance, and that it has had some problems with lacking maintence.</p>
+<p>Earlier in 2025 some new life was given to Tayga, in the form of Andrew Palardy being the new maintainer (Checkout his <em><strong><a href="https://www.youtube.com/@apalrdsadventures">youtube channel</a></strong></em> if you like this kind of content)</p>
+<p>It is ofcourse posible to setup a VM, and just run Tayga on any Linux server, but tayga is also the NAT64 option for OpnSense, and PfSense.</p>
+<h4 id="jool">Jool</h4>
+<p>Jool seems to be a newer better performing option, development seems to be slow but still existing.
+Unlike Tayga, it runs as a kernel module. This could be why the performance is much better.</p>
+<p>I haven&rsquo;t done any performance testing but Nico Schottelius did a <em><strong><a href="https://ripe85.ripe.net/presentations/78-ripe85-open-source-nat64.pdf">presentation at RIPE85</a></strong></em> and found Jool to perform more than twice as fast as Tayga, but I haven&rsquo;t tested it myself yet.</p>
+<p>If you want an out of the box solution using Jool, it seems like Jool is the built in NAT64 option for VYOS.</p>
+<h4 id="cisco-ios-xe">Cisco IOS XE</h4>
+<p>I happen to have a fairly modern Cisco router in my lab, so I wanted to look at if i could use that. I would probably not recormend going out to buy a physical router just to use it for NAT64.</p>
+<p>The main pro for me is that it is something that is more likely to see in a production network. Obivoiusly when running a production network, vendor support is a very important component. It also seems very easy to configure, and i am sure it would work fine.
+A drawback for me is power consumption. I currently don&rsquo;t have any other reason to run that router 24/7, so locating NAT64 on it, would add a new source of power draw to my homelab.</p>
+<h2 id="my-setup">My setup</h2>
+<p>Based on above mentioned options, i have decided to use Jool but inside VYOS. I have also decided to use DNS64 given that the majority of my devices doesn&rsquo;t have a built in CLAT implementation.</p>
+<h3 id="vyos-nat64-configuration">VYOS NAT64 configuration</h3>
+<p>Even though i have sevral diffrent VYOS routers in my network, i have decided to setup a new router for this purpose. I am mainly doing this for seperation of functions, and because any excuse to complicate my home networks routing is a good one.
+I will be using the following configuration:</p>
+<pre tabindex="0"><code></code></pre>
           </article>
         </div>
       </div>
@@ -438,18 +441,20 @@ A Glimpse into the Future: An introduction to IPv6 in your homelab | Anders Ball
               <div class="toc-content">
                 <nav id="TableOfContents">
   <ul>
-    <li><a href="#why-should-ipv6-be-a-part-of-a-homelab">Why Should IPv6 be a part of a homelab?</a></li>
-    <li><a href="#ipv6-mostly-vs-ipv6-only">IPv6 Mostly vs IPv6 Only</a>
+    <li><a href="#what-is-nat64-and-why-do-we-need-it">What is NAT64 and why do we need it?</a></li>
+    <li><a href="#how-does-nat64-work">How does NAT64 work?</a></li>
+    <li><a href="#client-interaction-with-nat64">Client interaction with NAT64</a>
       <ul>
-        <li><a href="#ipv6-only">IPv6 Only</a></li>
-        <li><a href="#ipv6-mostly">IPv6 Mostly</a></li>
-        <li><a href="#my-target">My target</a></li>
+        <li><a href="#dns64">DNS64</a></li>
+        <li><a href="#464xlat">464XLAT</a></li>
+        <li><a href="#comparing-nat64-implementations">Comparing NAT64 implementations</a></li>
       </ul>
     </li>
-    <li><a href="#so-how-do-i-access-ipv4-only-sites">So how do i access ipv4 only sites?</a></li>
-    <li><a href="#a-short-introduction-to-my-home-network-and-what-i-want-to-do">A short introduction to my home network, and what i want to do.</a></li>
-    <li><a href="#expected-challenges">Expected challenges</a></li>
-    <li><a href="#what-is-next">What is next?</a></li>
+    <li><a href="#my-setup">My setup</a>
+      <ul>
+        <li><a href="#vyos-nat64-configuration">VYOS NAT64 configuration</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
               </div>
@@ -477,6 +482,10 @@ A Glimpse into the Future: An introduction to IPv6 in your homelab | Anders Ball
                 target="_blank"
               >Home network</a></li>
               
+              <li class="list-inline-item"><a href="http://localhost:1313/tags/vyos"
+                target="_blank"
+              >Vyos</a></li>
+              
             </ul>
           </aside>
           
@@ -487,22 +496,22 @@ A Glimpse into the Future: An introduction to IPv6 in your homelab | Anders Ball
             <div class="social-content">
               <ul class="list-inline">
                 <li class="list-inline-item text-center">
-                  <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url=http%3a%2f%2flocalhost%3a1313%2fposts%2fipv6-mostly-home-intro%2f">
+                  <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url=http%3a%2f%2flocalhost%3a1313%2fposts%2fnat64-for-the-homelab%2f">
                     <i class="fab fa-linkedin"></i>
                   </a>
                 </li>
                 <li class="list-inline-item text-center">
-                  <a target="_blank" href="https://twitter.com/share?text=A%20Glimpse%20into%20the%20Future%3a%20An%20introduction%20to%20IPv6%20in%20your%20homelab&url=http%3a%2f%2flocalhost%3a1313%2fposts%2fipv6-mostly-home-intro%2f">
+                  <a target="_blank" href="https://twitter.com/share?text=Nat64%20for%20the%20Homelab&url=http%3a%2f%2flocalhost%3a1313%2fposts%2fnat64-for-the-homelab%2f">
                     <i class="fab fa-twitter"></i>
                   </a>
                 </li>
                 <li class="list-inline-item text-center">
-                  <a target="_blank" href="https://api.whatsapp.com/send?text=A%20Glimpse%20into%20the%20Future%3a%20An%20introduction%20to%20IPv6%20in%20your%20homelab: http%3a%2f%2flocalhost%3a1313%2fposts%2fipv6-mostly-home-intro%2f">
+                  <a target="_blank" href="https://api.whatsapp.com/send?text=Nat64%20for%20the%20Homelab: http%3a%2f%2flocalhost%3a1313%2fposts%2fnat64-for-the-homelab%2f">
                     <i class="fab fa-whatsapp"></i>
                   </a>
                 </li>
                 <li class="list-inline-item text-center">
-                  <a target="_blank" href='mailto:?subject=A%20Glimpse%20into%20the%20Future%3a%20An%20introduction%20to%20IPv6%20in%20your%20homelab&amp;body=Check%20out%20this%20site http%3a%2f%2flocalhost%3a1313%2fposts%2fipv6-mostly-home-intro%2f'>
+                  <a target="_blank" href='mailto:?subject=Nat64%20for%20the%20Homelab&amp;body=Check%20out%20this%20site http%3a%2f%2flocalhost%3a1313%2fposts%2fnat64-for-the-homelab%2f'>
                     <i class="fa fa-envelope"></i>
                   </a>
                 </li>

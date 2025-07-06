@@ -6,14 +6,21 @@
     <description>Recent content in IPv6 on Anders Ballegaard</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 05 Jul 2025 22:56:45 +0200</lastBuildDate>
+    <lastBuildDate>Sun, 06 Jul 2025 09:05:08 +0200</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/ipv6/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Nat64 for the Homelab</title>
+      <link>http://localhost:1313/posts/nat64-for-the-homelab/</link>
+      <pubDate>Sun, 06 Jul 2025 09:05:08 +0200</pubDate>
+      <guid>http://localhost:1313/posts/nat64-for-the-homelab/</guid>
+      <description>&lt;h1 id=&#34;writing-guide&#34;&gt;Writing guide&lt;/h1&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Intro with refrence to previous post&lt;/li&gt;&#xA;&lt;li&gt;What is nat64 and why do we need it?&lt;/li&gt;&#xA;&lt;li&gt;How does nat64 work?&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Common concepts accross all nat64 implementations&lt;/li&gt;&#xA;&lt;li&gt;What can differ&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;Client interaction with NAT64&#xA;&lt;ul&gt;&#xA;&lt;li&gt;464XLAT&lt;/li&gt;&#xA;&lt;li&gt;DNS64&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;Comparison of diffrent NAT64 implementations&lt;/li&gt;&#xA;&lt;li&gt;Setup of my chosen implementation&#xA;&lt;ul&gt;&#xA;&lt;li&gt;My requirements for a nat64 solution&lt;/li&gt;&#xA;&lt;li&gt;My choice&lt;/li&gt;&#xA;&lt;li&gt;Setting up the implementation&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h1 id=&#34;content&#34;&gt;Content&lt;/h1&gt;</description>
+    </item>
     <item>
       <title>A Glimpse into the Future: An introduction to IPv6 in your homelab</title>
       <link>http://localhost:1313/posts/ipv6-mostly-home-intro/</link>
       <pubDate>Sat, 05 Jul 2025 22:56:45 +0200</pubDate>
       <guid>http://localhost:1313/posts/ipv6-mostly-home-intro/</guid>
-      <description>&lt;p&gt;I have been a long-time advocate for IPv6. It has been a crucial part of my homelab for years, and through my work at a major Danish ISP, I&amp;rsquo;ve have among other things contributed to enabling and improving IPv6 for many Danish broadband customers.&lt;/p&gt;&#xA;&lt;p&gt;As I&amp;rsquo;m currently updating and fine-tuning some aspects of my homelab, I thought it would be a good idea to document the process here. This will serve as not only personal documentation but also an introduction for anyone interested in setting up their own IPv6 homelab.&lt;/p&gt;</description>
+      <description>&lt;h2 id=&#34;why-should-ipv6-be-a-part-of-a-homelab&#34;&gt;Why Should IPv6 be a part of a homelab?&lt;/h2&gt;&#xA;&lt;p&gt;I have been a long-time advocate for IPv6. It has been a crucial part of my homelab for years, and through my work at a major Danish ISP, I&amp;rsquo;ve have among other things contributed to enabling and improving IPv6 for many Danish broadband customers.&lt;/p&gt;&#xA;&lt;p&gt;As I&amp;rsquo;m currently updating and fine-tuning some aspects of my homelab, I thought it would be a good idea to document the process here. This will serve as not only personal documentation but also an introduction for anyone interested in setting up their own IPv6 homelab.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>
