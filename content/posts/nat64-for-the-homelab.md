@@ -1,7 +1,7 @@
 ---
 date: '2025-07-06T09:05:08+02:00'
 draft: false
-title: 'Nat64 for the Homelab'
+title: 'NAT64 for the Homelab'
 author: "Anders Ballegaard"
 tags:
   - IPv6

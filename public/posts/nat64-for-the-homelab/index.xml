@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Nat64 for the Homelab on Anders Ballegaard</title>
+    <title>NAT64 for the Homelab on Anders Ballegaard</title>
     <link>http://localhost:1313/posts/nat64-for-the-homelab/</link>
-    <description>Recent content in Nat64 for the Homelab on Anders Ballegaard</description>
+    <description>Recent content in NAT64 for the Homelab on Anders Ballegaard</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate></lastBuildDate>

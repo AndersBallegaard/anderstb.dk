@@ -9,7 +9,7 @@
     <lastBuildDate>Sun, 06 Jul 2025 09:05:08 +0200</lastBuildDate>
     <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Nat64 for the Homelab</title>
+      <title>NAT64 for the Homelab</title>
       <link>http://localhost:1313/posts/nat64-for-the-homelab/</link>
       <pubDate>Sun, 06 Jul 2025 09:05:08 +0200</pubDate>
       <guid>http://localhost:1313/posts/nat64-for-the-homelab/</guid>
