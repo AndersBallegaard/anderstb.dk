@@ -42,17 +42,24 @@
           gtag('config', 'G-NXN60TES0F');
         }
       </script>
-<meta property="og:url" content="http://localhost:1313/404.html">
+<meta property="og:url" content="http://localhost:1313/posts/experimenting-with-srv6-vpn-over-internet/">
   <meta property="og:site_name" content="Anders Ballegaard">
-  <meta property="og:title" content="404 Page not found">
-  <meta property="og:description" content="A collection of my thoughts, ideas, and projects.">
+  <meta property="og:title" content="Experimenting With Srv6 VPN services Over The Internet">
+  <meta property="og:description" content="The start of a series of posts related to building an ipv6 mostly home network and lab">
   <meta property="og:locale" content="en_us">
-  <meta property="og:type" content="website">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-07-06T12:51:45+02:00">
+    <meta property="article:modified_time" content="2025-07-06T12:51:45+02:00">
+    <meta property="article:tag" content="IPv6">
+    <meta property="article:tag" content="Srv6">
+    <meta property="article:tag" content="Vyos">
+    <meta property="article:tag" content="L3VPN">
 
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="404 Page not found">
-  <meta name="twitter:description" content="A collection of my thoughts, ideas, and projects.">
+  <meta name="twitter:title" content="Experimenting With Srv6 VPN services Over The Internet">
+  <meta name="twitter:description" content="The start of a series of posts related to building an ipv6 mostly home network and lab">
 
 
 <link rel="stylesheet" href="/bootstrap-5/css/bootstrap.min.css" media="all"><link rel="stylesheet" href="/css/header.css" media="all">
@@ -116,14 +123,18 @@
 
 
 
-<meta name="description" content=A&#32;collection&#32;of&#32;my&#32;thoughts,&#32;ideas,&#32;and&#32;projects.>
+<meta name="description" content="The start of a series of posts related to building an ipv6 mostly home network and lab">
+<link rel="stylesheet" href="/css/single.css">
+
+
+<script defer src="/fontawesome-6/all-6.4.2.js"></script>
 
 
   
   
 
   <title>
-Anders Ballegaard | 404 page not found
+Experimenting With Srv6 VPN services Over The Internet | Anders Ballegaard
 
   </title>
 </head>
@@ -301,10 +312,302 @@ Anders Ballegaard | 404 page not found
     </nav>
 </header>
 <div id="content">
-<div class="container py-5 text-center">
-    <img src="/404.png" alt='404 page not found' class="img-fluid" width="40%">
-    <h1>404 page not found</h1>
+<section id="single">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-sm-12 col-md-12 col-lg-9">
+        <div class="pr-lg-4">
+          <div class="title mb-5">
+            <h1 class="text-center mb-4">Experimenting With Srv6 VPN services Over The Internet</h1>
+            <div class="text-center">
+              
+                Anders Ballegaard
+                <small>|</small>
+              
+              Jul 6, 2025
+
+              
+              <span id="readingTime">
+                min read
+              </span>
+              
+            </div>
+          </div>
+          
+          <div class="featured-image">
+            <img class="img-fluid mx-auto d-block" src="/images/content/srv6-vpn/srv6-vpn.png" alt="Experimenting With Srv6 VPN services Over The Internet">
+          </div>
+          
+          <article class="page-content  p-2">
+          <p>Ever since learning about SRv6 i have been interested in testing how Srv6 based VPN services work, especially over an uncontrolled network like the Internet. I happend to have a bit of time and energy to play around with it. This post doesn&rsquo;t describe a production ready setup, it&rsquo;s just some notes from playing around and figuring out what is posible, how it works, and getting some ideas for future tinkering.</p>
+<h2 id="what-is-segment-routing-and-srv6">What is Segment routing and SRv6?</h2>
+<p>Segment routing is a modern aproach to directing traffic. It works over either IPv6 or MPLS, and has a lot of interesting features related to redundancy, traffic engineering, and services.</p>
+<p>SRv6 is the IPv6 flavor of Segment routing. Unlike SR-MPLS it works over any IPv6 data plane (although you might want more). This flexibility makes it posible to in theory extend SRv6 based services over the Internet, this is the thing we are trying to exploit today. The fact that it&rsquo;s just IPv6 also allows devices that traditionally doesn&rsquo;t support MPLS to be part of the network, like Servers, Phones, etc however we have not geneally seen this in the real world.</p>
+<p>There are a lot of resources to learn much more about Segment routing, i would recormend starting here <em><strong><a href="https://www.segment-routing.net/">segment-routing.net</a></strong></em></p>
+<h2 id="about-the-test-setup">About the test setup</h2>
+<p>To reduce the number of variables, this test network consists of just two routers, in this case with direct BGP peerings between eachother.
+The routers are based on VyOS 2025.07.06-0022-rolling.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Router</th>
+          <th>WAN Linknet</th>
+          <th>Routed prefix</th>
+          <th>Router ID</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>VPN-Site-A</td>
+          <td>2a0e:97c0:ae0:700a::2/64</td>
+          <td>2a0e:97c0:ae6:1000::/56</td>
+          <td>10.1.1.1</td>
+      </tr>
+      <tr>
+          <td>VPN-Site-B</td>
+          <td>2a0e:97c0:ae0:700b::2/64</td>
+          <td>2a0e:97c0:ae6:2000::/56</td>
+          <td>10.2.2.2</td>
+      </tr>
+  </tbody>
+</table>
+<p>Both routers are part of the ASN 65513, and both have a static ipv6 default route configured towards the ISP.</p>
+<h2 id="setting-up-srv6">Setting up SRv6</h2>
+<p>insert line for intro</p>
+<h3 id="setting-up-bgp-between-the-routers">Setting up BGP between the routers</h3>
+<p>BGP is already enable on the routers, so we just need to configure peerings, and srv6 options.</p>
+<p>Let&rsquo;s start by configuring a peer-group, this should be applied to both routers</p>
+<pre tabindex="0"><code>set protocols bgp peer-group INTERNAL remote-as internal
+set protocols bgp peer-group INTERNAL password CorrectHorseBatteryStable
+set protocols bgp peer-group INTERNAL address-family ipv4-vpn
+set protocols bgp peer-group INTERNAL address-family ipv6-vpn
+set protocols bgp peer-group INTERNAL capability extended-nexthop
+</code></pre><p>Now let&rsquo;s create the actual peerings between the two routers using the peer group we created above.
+In theory we could create a loopback interface inside the routed prefix, and if you have multiple WAN&rsquo;s that might be the best option, but for this example I will just create the BGP peering between the linknet IP&rsquo;s.</p>
+<pre tabindex="0"><code># On VPN-Site-A
+set protocols bgp neighbor 2a0e:97c0:ae0:700b::2 peer-group INTERNAL
+
+# On VPN-Site-B
+set protocols bgp neighbor 2a0e:97c0:ae0:700a::2 peer-group INTERNAL
+</code></pre><p>And just like that we have a BGP peering with no routes.
+<img src="/images/content/srv6-vpn/bgp-confirmed.png" alt="bgp-peering"></p>
+<h3 id="configuring-srv6">Configuring SRv6</h3>
+<p>We need to configure the routed prefix we got from the ISP as a SID, besides that we also need to tell SRv6 what interfaces to use.</p>
+<p>Let&rsquo;s start by configuring a locator SID for VPN services. For this purpose, i am reserving a prefix inside the routed network.
+A small sidenote, in theory you could create this setup on a router that has a DHCPv6-PD prefix, but given this part of the configuration is static, it could easily break.</p>
+<pre tabindex="0"><code># On VPN-Site-A
+set protocols segment-routing interface eth0
+set protocols segment-routing srv6 locator VPN-SERVICES behavior-usid
+set protocols segment-routing srv6 locator VPN-SERVICES prefix 2a0e:97c0:ae6:1001::/64
+set protocols bgp srv6 locator VPN-SERVICES
+
+# On VPN-Site-B
+set protocols segment-routing interface eth0
+set protocols segment-routing srv6 locator VPN-SERVICES behavior-usid
+set protocols segment-routing srv6 locator VPN-SERVICES prefix 2a0e:97c0:ae6:2001::/64
+set protocols bgp srv6 locator VPN-SERVICES
+</code></pre><h3 id="building-our-first-l3vpn">Building our first L3VPN</h3>
+<p>In theory we should now have a BGP peering, a routed prefix, and an SRv6 locator. So the next step is to try using it.
+In this step we will create a VRF, and use that VRF on two dummy interfaces to validate connectivity.</p>
+<p>Let&rsquo;s start by defining the VRF</p>
+<pre tabindex="0"><code># Shared for both routers
+set vrf name L3VPN-1 table 101
+set vrf name L3VPN-1 protocols bgp address-family ipv4-unicast route-target vpn both 65513:101
+set vrf name L3VPN-1 protocols bgp address-family ipv6-unicast route-target vpn both 65513:101
+
+set vrf name L3VPN-1 protocols bgp address-family ipv4-unicast import vpn
+set vrf name L3VPN-1 protocols bgp address-family ipv4-unicast export vpn
+
+set vrf name L3VPN-1 protocols bgp address-family ipv6-unicast import vpn
+set vrf name L3VPN-1 protocols bgp address-family ipv6-unicast export vpn
+
+set vrf name L3VPN-1 protocols bgp sid vpn per-vrf export auto
+set vrf name L3VPN-1 protocols bgp system-as 65513
+
+set vrf name L3VPN-1 protocols bgp address-family ipv4-unicast redistribute connected
+set vrf name L3VPN-1 protocols bgp address-family ipv6-unicast redistribute connected
+
+set interfaces dummy dum101 vrf L3VPN-1
+set interfaces dummy dum101 description &#34;L3VPN test interface&#34;
+
+# VPN-Site-A
+set interfaces dummy dum101 address 172.16.10.1/24
+set interfaces dummy dum101 address 2001:db8:1::1/64
+set vrf name L3VPN-1 protocols bgp address-family ipv4-unicast rd vpn export &#39;10.1.1.1:101&#39;
+set vrf name L3VPN-1 protocols bgp address-family ipv6-unicast rd vpn export &#39;10.1.1.1:101&#39;
+set vrf name L3VPN-1 protocols bgp parameters router-id 10.1.1.1
+
+# VPN-Site-B
+set interfaces dummy dum101 address 172.16.20.1/24
+set interfaces dummy dum101 address 2001:db8:2::1/64
+set vrf name L3VPN-1 protocols bgp address-family ipv4-unicast rd vpn export &#39;10.2.2.2:101&#39;
+set vrf name L3VPN-1 protocols bgp address-family ipv6-unicast rd vpn export &#39;10.2.2.2:101&#39;
+set vrf name L3VPN-1 protocols bgp parameters router-id 10.2.2.2
+</code></pre><p>Now let&rsquo;s see if it worked, let&rsquo;s start by checking to see if a locator has been registered
+<img src="/images/content/srv6-vpn/locator-verification.png" alt="locator">
+As you can see a /128 has been taken out, pointing to L3VPN-1 with type End.DT46 meaning this single locator is valid for both ipv4 and ipv6.</p>
+<p>Now let&rsquo;s check the route table
+<img src="/images/content/srv6-vpn/l3vpn-routes.png" alt="Route table">
+As you can see, we have routes for both V4 and V6. Now for the fun part, let&rsquo;s try to ping it.
+<img src="/images/content/srv6-vpn/ping.png" alt="Ping">
+And success!!! We now have a working L3VPN over internet.</p>
+<p>But how does that look on the wire?</p>
+<p>As you can see, matching on Ipv6&rsquo;s next header 43 (source routing) field, we are seeing both the v4 and v6 pings.
+But as you can also see it&rsquo;s unencrypted, In theory this should be solvable with IPsec, you probably just want to make sure the SRH isn&rsquo;t being encrypted.
+<img src="/images/content/srv6-vpn/wireshark-1.png" alt="Wireshark overview"></p>
+<p>Well traffic is flowing from in this case VPN-SITE-B&rsquo;s Linknet address to the SID we saw VPN-SITE-A had reserved for the L3VPN. Inside the packet we can see the following:</p>
+<ul>
+<li>We have a routing header of type segment routing (type 4)</li>
+<li>we can see there are 0 segments left, in our case we only have 1 segment, but if you added in traffic engineering, more segments could exist.</li>
+<li>We can see our current segment is 2a0e:97c0:ae6:1001:1:: this matches our destination addess. This is exactly how it should be.</li>
+<li>The next header is IPIP this indicates the next packet is an IPv4 packet, if we had looked at one of the IPv6 pings, the next header would have been IPv6.</li>
+<li>We can see the inner IP header is just a normal header we would expect to see between our two hosts inside the VPN.
+<img src="/images/content/srv6-vpn/wireshark-2.png" alt="Wireshark packet"></li>
+</ul>
+<h2 id="how-can-this-be-used">How can this be used?</h2>
+<p>The setup described above with only two sites isn&rsquo;t all that interesting from a usecase perspective. What if we had more sites? What if we wanted to route traffic between all the sites? What if we wanted to steer traffic around the internet in special ways? What if we where using hosts instead of routers?</p>
+<p>Those are the kind of questions where i think Srv6 becomes very interesting. I might explore how to use SRv6 to create a &ldquo;poor mans SD-WAN&rdquo; solution or something like that in the future.</p>
+<p>SRv6 is also very intersting from a host/server perspective, the setup above could also be implemted in a container enviorment like K8S to provide a very flexible k8s overlay network. Infact the Cillium project is already kinda doing that,</p>
+<h1 id="conclusion">Conclusion</h1>
+<p>SRv6 is a very powerful technology, while this simple setup didn&rsquo;t acchive anything you couldn&rsquo;t do in a simpler way, i hope it showed what could be posible, and started some thoughts of how we could use SRv6.</p>
+
+          </article>
+        </div>
+      </div>
+      <div class="col-sm-12 col-md-12 col-lg-3">
+        <div id="stickySideBar" class="sticky-sidebar">
+          
+          <aside class="toc">
+              <h5>
+                Table Of Contents
+              </h5>
+              <div class="toc-content">
+                <nav id="TableOfContents">
+  <ul>
+    <li><a href="#what-is-segment-routing-and-srv6">What is Segment routing and SRv6?</a></li>
+    <li><a href="#about-the-test-setup">About the test setup</a></li>
+    <li><a href="#setting-up-srv6">Setting up SRv6</a>
+      <ul>
+        <li><a href="#setting-up-bgp-between-the-routers">Setting up BGP between the routers</a></li>
+        <li><a href="#configuring-srv6">Configuring SRv6</a></li>
+        <li><a href="#building-our-first-l3vpn">Building our first L3VPN</a></li>
+      </ul>
+    </li>
+    <li><a href="#how-can-this-be-used">How can this be used?</a></li>
+  </ul>
+</nav>
+              </div>
+          </aside>
+          
+
+          
+          <aside class="tags">
+            <h5>Tags</h5>
+            <ul class="tags-ul list-unstyled list-inline">
+              
+              <li class="list-inline-item"><a href="http://localhost:1313/tags/ipv6"
+                target="_blank"
+              >IPv6</a></li>
+              
+              <li class="list-inline-item"><a href="http://localhost:1313/tags/srv6"
+                target="_blank"
+              >Srv6</a></li>
+              
+              <li class="list-inline-item"><a href="http://localhost:1313/tags/vyos"
+                target="_blank"
+              >Vyos</a></li>
+              
+              <li class="list-inline-item"><a href="http://localhost:1313/tags/l3vpn"
+                target="_blank"
+              >L3VPN</a></li>
+              
+            </ul>
+          </aside>
+          
+
+          
+          <aside class="social">
+            <h5>Social</h5>
+            <div class="social-content">
+              <ul class="list-inline">
+                <li class="list-inline-item text-center">
+                  <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url=http%3a%2f%2flocalhost%3a1313%2fposts%2fexperimenting-with-srv6-vpn-over-internet%2f">
+                    <i class="fab fa-linkedin"></i>
+                  </a>
+                </li>
+                <li class="list-inline-item text-center">
+                  <a target="_blank" href="https://twitter.com/share?text=Experimenting%20With%20Srv6%20VPN%20services%20Over%20The%20Internet&url=http%3a%2f%2flocalhost%3a1313%2fposts%2fexperimenting-with-srv6-vpn-over-internet%2f">
+                    <i class="fab fa-twitter"></i>
+                  </a>
+                </li>
+                <li class="list-inline-item text-center">
+                  <a target="_blank" href="https://api.whatsapp.com/send?text=Experimenting%20With%20Srv6%20VPN%20services%20Over%20The%20Internet: http%3a%2f%2flocalhost%3a1313%2fposts%2fexperimenting-with-srv6-vpn-over-internet%2f">
+                    <i class="fab fa-whatsapp"></i>
+                  </a>
+                </li>
+                <li class="list-inline-item text-center">
+                  <a target="_blank" href='mailto:?subject=Experimenting%20With%20Srv6%20VPN%20services%20Over%20The%20Internet&amp;body=Check%20out%20this%20site http%3a%2f%2flocalhost%3a1313%2fposts%2fexperimenting-with-srv6-vpn-over-internet%2f'>
+                    <i class="fa fa-envelope"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </aside>
+          
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 col-md-12 col-lg-9 p-4">
+        
+      </div>
+    </div>
+  </div>
+  <button class="p-2 px-3" onclick="topFunction()" id="topScroll">
+    <i class="fas fa-angle-up"></i>
+  </button>
+</section>
+
+
+<div class="progress">
+  <div id="scroll-progress-bar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
 </div>
+<Script src="/js/scrollProgressBar.js"></script>
+
+
+<script>
+  var topScroll = document.getElementById("topScroll");
+  window.onscroll = function() {scrollFunction()};
+
+  function scrollFunction() {
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+      topScroll.style.display = "block";
+    } else {
+      topScroll.style.display = "none";
+    }
+  }
+
+  function topFunction() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+  }
+
+  
+  let stickySideBarElem = document.getElementById("stickySideBar");
+  let stickyNavBar =  true ;
+  if(stickyNavBar) {
+    let headerElem = document.getElementById("profileHeader");
+    let headerHeight = headerElem.offsetHeight + 15;
+    stickySideBarElem.style.top = headerHeight + "px";
+  } else {
+    stickySideBarElem.style.top = "50px";
+  }
+</script>
+
+
+<script src="/js/readingTime.js"></script>
+
+
 
   </div><footer>
     
