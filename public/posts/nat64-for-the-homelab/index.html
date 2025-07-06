@@ -340,44 +340,12 @@ Nat64 for the Homelab | Anders Ballegaard
           </div>
           
           <article class="page-content  p-2">
-          <h1 id="writing-guide">Writing guide</h1>
-<ul>
-<li>Done - Intro with refrence to previous post</li>
-<li>Done - What is nat64 and why do we need it?</li>
-<li>Done - How does nat64 work?
-<ul>
-<li>Common concepts accross all nat64 implementations
-<ul>
-<li>Address translation</li>
-<li>Common prefix</li>
-</ul>
-</li>
-<li>What can differ</li>
-</ul>
-</li>
-<li>Done - Client interaction with NAT64
-<ul>
-<li>464XLAT</li>
-<li>DNS64</li>
-<li>Nat64 prefix discovery</li>
-</ul>
-</li>
-<li>Done - Comparison of diffrent NAT64 implementations</li>
-<li>Setup of my chosen implementation
-<ul>
-<li>My requirements for a nat64 solution</li>
-<li>My choice (NAT64 + client side)</li>
-<li>Setting up the implementation</li>
-</ul>
-</li>
-</ul>
-<h1 id="content">Content</h1>
-<p>As discussed in <em><strong><a href="/posts/ipv6-mostly-home-intro/">the previous post</a></strong></em>, I am currently making some modifications to my homelab. In as a part of this process, I am looking at NAT64 solutions again. I am currently running Tayga on OpnSense, but want to move to NAT64 to a dedicated VM. This post will be going through what NAT64 is, how clients interact with it, a comparison of diffrent implementations and finally setting up my chosen implementation.</p>
+          <p>As discussed in <em><strong><a href="/posts/ipv6-mostly-home-intro/">the previous post</a></strong></em>, I am currently making some modifications to my homelab. As a part of this process, I am looking at NAT64 solutions again. I am currently running Tayga on OpnSense, but want to move to NAT64 with a dedicated VM. This post will be going through what NAT64 is, how clients interact with it, a comparison of different implementations and finally setting up my chosen implementation.</p>
 <h2 id="what-is-nat64-and-why-do-we-need-it">What is NAT64 and why do we need it?</h2>
-<p>We need NAT64 in IPv6 mostly and IPv6 only networks because there are still many sites and services on the internet that don&rsquo;t support IPv6. NAT64 solves this by mapping every single IPv4 address to a unique IPv6 address, which can be used for communication with those addresses.</p>
-<p>This ofcourse doesn&rsquo;t magicly fix client devices that doesn&rsquo;t support IPv6, but it enables devices with IPv6 support to start going IPv6 only. Mobile devices, and some desktop operating systems (primarily macOS) support IPv6 only operations particularly well, due to having built in CLAT implementations. But we will dive deen into this later.</p>
+<p>We need NAT64 in IPv6 mostly and IPv6 only networks because there are still many sites and services on the internet that don&rsquo;t support IPv6. NAT64 solves this problem by mapping every single IPv4 address to a unique IPv6 address, which can be used for communication with those addresses.</p>
+<p>This doesn&rsquo;t magically fix client devices that don&rsquo;t support IPv6, but it enables devices with IPv6 support to start going IPv6 only. Mobile devices, and some desktop operating systems (primarily macOS) support IPv6 only operations particularly well, due to having built-in CLAT implementations. However, we will dive deeper into this later.</p>
 <h2 id="how-does-nat64-work">How does NAT64 work?</h2>
-<p>All NAT64 implementations map an ipv6 address into a /96 IPv6 prefix. Given that IPv6 addresses are 128 bits, and IPv4 addresses are 32 bits, the mapping is done by taking every single bit of the IPv4 address and adding it to the end of the IPv6 address. This means that for example an ipv4 address &lsquo;1.1.1.1&rsquo; could become &lsquo;64:ff9b::101:101&rsquo;, or &lsquo;96.7.128.175&rsquo; becomes &lsquo;64:ff9b::6007:80af&rsquo;.</p>
+<p>All NAT64 implementations map an IPv6 address into a /96 IPv6 prefix by taking every single bit of the IPv4 address and adding it to the end of the IPv6 address. This means that for example, an IPv4 address &lsquo;1.1.1.1&rsquo; could become &lsquo;64:ff9b::101:101&rsquo;, or &lsquo;96.7.128.175&rsquo; becomes &lsquo;64:ff9b::6007:80af&rsquo;.</p>
 <p>But where does the 64:ff9b:: come from? Well, you can technically use any /96 IPv6 prefix, but 64:ff9b::/96 is reserved to NAT64. Using 64:ff9b::/96 does have some pros and cons:</p>
 <ul>
 <li>If you want to use publicly avalible DNS64 services, this is the prefix they assume your NAT64 implementation will be using.</li>
@@ -386,7 +354,7 @@ Nat64 for the Homelab | Anders Ballegaard
 </ul>
 <p>There can be some diffrences between NAT64 implementations, but we will look more at that in the comparison section below. For homelab purposes i would also argue it makes quite a diffrence if you are managing the NAT64 software directly, or if you are using it as part of an intigrated solution like running NAT64 in OpnSense.</p>
 <h2 id="client-interaction-with-nat64">Client interaction with NAT64</h2>
-<p>It might be worth briefly looking at how clients interact with NAT64 before looking at the solutions themself. The two main ways are DNS64 or CLAT. These are not nessearily mutraly exclusive, and can be used in combination.</p>
+<p>It might be worth briefly looking at how clients interact with NAT64 before looking at the solutions themself. The two main ways are DNS64 and CLAT (also known as 464XLAT), which are not mutually exclusive, but can be used in combination.</p>
 <h3 id="dns64">DNS64</h3>
 <p>DNS64 essentially works by lying to the client, The DNS server sends A and AAAA queries for a given domain. If no AAAA record is found, it maps the A record address into a NAT64 address, for this reason it is very important that the DNS64 server knows the correct NAT64 prefix.
 <img src="/images/content/ipv6-series/DNS64_flow.png" alt="DNS64"></p>
@@ -425,9 +393,52 @@ A drawback for me is power consumption. I currently don&rsquo;t have any other r
 <h2 id="my-setup">My setup</h2>
 <p>Based on above mentioned options, i have decided to use Jool but inside VYOS. I have also decided to use DNS64 given that the majority of my devices doesn&rsquo;t have a built in CLAT implementation.</p>
 <h3 id="vyos-nat64-configuration">VYOS NAT64 configuration</h3>
-<p>Even though i have sevral diffrent VYOS routers in my network, i have decided to setup a new router for this purpose. I am mainly doing this for seperation of functions, and because any excuse to complicate my home networks routing is a good one.
-I will be using the following configuration:</p>
-<pre tabindex="0"><code></code></pre>
+<p>Even though i have sevral diffrent VYOS routers in my network, i have decided to setup a new router for this purpose. I am mainly doing this for seperation of functions, and because any excuse to complicate my home networks routing is a good one.</p>
+<p>To start out with, i am only building one router, but i might add redundancy in the future</p>
+<p>I will be using the following configuration:</p>
+<pre tabindex="0"><code># Set the IPv4 external address, in my case i just use DHCP
+set interfaces ethernet eth0 address dhcp
+
+# Setup a loopback IP for mgmt
+set interfaces loopback lo address 3fff::64:a/128
+
+# Set the IPv6 address
+set interfaces ethernet eth0 address 3fff:64:ff9b::b/64
+
+# Setup routing, in my case this router will be part of my ASN AS201911. Using a private ASN, or static routing is absolutly also an option.
+set policy prefix-list6 ANY6 rule 1 prefix ::/0
+set policy prefix-list6 ANY6 rule 1 ge 0
+set policy prefix-list6 ANY6 rule 1 action permit
+
+set policy prefix-list6 EXPORT rule 1 action permit
+set policy prefix-list6 EXPORT rule 1 prefix 3fff::64:a/128
+set policy prefix-list6 EXPORT rule 2 action permit
+set policy prefix-list6 EXPORT rule 2 prefix 64:ff9b::/96
+
+set protocols bgp system-as 201911
+set protocols bgp peer-group INTERNAL remote-as 201911
+set protocols bgp peer-group INTERNAL address-family ipv6-unicast
+set protocols bgp peer-group INTERNAL address-family ipv6-unicast prefix-list export EXPORT
+set protocols bgp peer-group INTERNAL address-family ipv6-unicast prefix-list import ANY6
+set protocols bgp address-family ipv6-unicast redistribute connected
+set protocols bgp address-family ipv6-unicast redistribute static
+set protocols bgp address-family ipv6-unicast network 64:ff9b::/96
+
+set protocols bgp neighbor 3fff:64:ff9b::a peer-group INTERNAL
+
+# Configure NAT64
+set nat64 source rule 100 source prefix &#39;64:ff9b::/96&#39;
+set nat64 source rule 100 translation pool 1 address 100.127.255.1
+set nat64 source rule 100 translation pool 1 port &#39;2000-65000&#39;
+
+# NAT64 really wants a static ip, but since i want to configure my interface as DHCP, i am creating an internal interface and NAT44&#39;ing that interface.
+set interfaces dummy dum0 description VIRTUAL_NAT64_OUTSIDE
+set interfaces dummy dum0 address 100.127.255.1/24
+
+set nat source rule 100 outbound-interface name &#39;eth0&#39;
+set nat source rule 100 source address &#39;100.127.255.0/24&#39;
+set nat source rule 100 translation address &#39;masquerade&#39;
+</code></pre>
           </article>
         </div>
       </div>
@@ -600,26 +611,7 @@ I will be using the following configuration:</p>
                         <h5 class="card-title bg-transparent" title="Nat64 for the Homelab">Nat64 for the Homelab</h5>
                     </a>
                     <div class="card-text secondary-font">
-                        <p><h1 id="writing-guide">Writing guide</h1>
-<ul>
-<li>Done - Intro with refrence to previous post</li>
-<li>Done - What is nat64 and why do we need it?</li>
-<li>Done - How does nat64 work?
-<ul>
-<li>Common concepts accross all nat64 implementations
-<ul>
-<li>Address translation</li>
-<li>Common prefix</li>
-</ul>
-</li>
-<li>What can differ</li>
-</ul>
-</li>
-<li>Done - Client interaction with NAT64
-<ul>
-<li>464XLAT</li>
-<li>DNS64</li>
-<li>Nat64 …</li></ul></li></li></li></ul></li></ul></li></ul></p>
+                        <p><p>As discussed in <em><strong><a href="/posts/ipv6-mostly-home-intro/">the previous post</a></strong></em>, I am currently making some modifications to my homelab. As a part of this process, I am looking at NAT64 solutions again. I am currently running Tayga on OpnSense, but want to move to NAT64 with a dedicated VM. This post will be going through what NAT64 is, how …</p></p>
                     </div>
                 </div>
                 <div class="mt-auto card-footer">

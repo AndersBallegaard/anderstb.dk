@@ -1,6 +1,6 @@
 ---
 date: '2025-07-06T09:05:08+02:00'
-draft: true
+draft: false
 title: 'Nat64 for the Homelab'
 author: "Anders Ballegaard"
 tags:
@@ -13,34 +13,16 @@ image: /images/content/ipv6-series/DNS64_flow.png
 description: "An comparison of diffrent NAT64 options, and an introduction to NAT64 related concepts"
 toc: true
 ---
-# Writing guide
-- Done - Intro with refrence to previous post
-- Done - What is nat64 and why do we need it?
-- Done - How does nat64 work?
-    - Common concepts accross all nat64 implementations
-        - Address translation
-        - Common prefix
-    - What can differ
-- Done - Client interaction with NAT64
-    - 464XLAT
-    - DNS64
-    - Nat64 prefix discovery
-- Done - Comparison of diffrent NAT64 implementations
-- Setup of my chosen implementation
-    - My requirements for a nat64 solution
-    - My choice (NAT64 + client side)
-    - Setting up the implementation
 
-# Content
-As discussed in ***[the previous post](/posts/ipv6-mostly-home-intro/)***, I am currently making some modifications to my homelab. In as a part of this process, I am looking at NAT64 solutions again. I am currently running Tayga on OpnSense, but want to move to NAT64 to a dedicated VM. This post will be going through what NAT64 is, how clients interact with it, a comparison of diffrent implementations and finally setting up my chosen implementation.
+As discussed in ***[the previous post](/posts/ipv6-mostly-home-intro/)***, I am currently making some modifications to my homelab. As a part of this process, I am looking at NAT64 solutions again. I am currently running Tayga on OpnSense, but want to move to NAT64 with a dedicated VM. This post will be going through what NAT64 is, how clients interact with it, a comparison of different implementations and finally setting up my chosen implementation.
 
 ## What is NAT64 and why do we need it?
-We need NAT64 in IPv6 mostly and IPv6 only networks because there are still many sites and services on the internet that don't support IPv6. NAT64 solves this by mapping every single IPv4 address to a unique IPv6 address, which can be used for communication with those addresses.
+We need NAT64 in IPv6 mostly and IPv6 only networks because there are still many sites and services on the internet that don't support IPv6. NAT64 solves this problem by mapping every single IPv4 address to a unique IPv6 address, which can be used for communication with those addresses.
 
-This ofcourse doesn't magicly fix client devices that doesn't support IPv6, but it enables devices with IPv6 support to start going IPv6 only. Mobile devices, and some desktop operating systems (primarily macOS) support IPv6 only operations particularly well, due to having built in CLAT implementations. But we will dive deen into this later.
+This doesn't magically fix client devices that don't support IPv6, but it enables devices with IPv6 support to start going IPv6 only. Mobile devices, and some desktop operating systems (primarily macOS) support IPv6 only operations particularly well, due to having built-in CLAT implementations. However, we will dive deeper into this later.
 
 ## How does NAT64 work?
-All NAT64 implementations map an ipv6 address into a /96 IPv6 prefix. Given that IPv6 addresses are 128 bits, and IPv4 addresses are 32 bits, the mapping is done by taking every single bit of the IPv4 address and adding it to the end of the IPv6 address. This means that for example an ipv4 address '1.1.1.1' could become '64:ff9b::101:101', or '96.7.128.175' becomes '64:ff9b::6007:80af'.
+All NAT64 implementations map an IPv6 address into a /96 IPv6 prefix by taking every single bit of the IPv4 address and adding it to the end of the IPv6 address. This means that for example, an IPv4 address '1.1.1.1' could become '64:ff9b::101:101', or '96.7.128.175' becomes '64:ff9b::6007:80af'.
 
 But where does the 64:ff9b:: come from? Well, you can technically use any /96 IPv6 prefix, but 64:ff9b::/96 is reserved to NAT64. Using 64:ff9b::/96 does have some pros and cons:
 - If you want to use publicly avalible DNS64 services, this is the prefix they assume your NAT64 implementation will be using.
@@ -50,7 +32,7 @@ But where does the 64:ff9b:: come from? Well, you can technically use any /96 IP
 There can be some diffrences between NAT64 implementations, but we will look more at that in the comparison section below. For homelab purposes i would also argue it makes quite a diffrence if you are managing the NAT64 software directly, or if you are using it as part of an intigrated solution like running NAT64 in OpnSense.
 
 ## Client interaction with NAT64
-It might be worth briefly looking at how clients interact with NAT64 before looking at the solutions themself. The two main ways are DNS64 or CLAT. These are not nessearily mutraly exclusive, and can be used in combination.
+It might be worth briefly looking at how clients interact with NAT64 before looking at the solutions themself. The two main ways are DNS64 and CLAT (also known as 464XLAT), which are not mutually exclusive, but can be used in combination.
 
 ### DNS64
 DNS64 essentially works by lying to the client, The DNS server sends A and AAAA queries for a given domain. If no AAAA record is found, it maps the A record address into a NAT64 address, for this reason it is very important that the DNS64 server knows the correct NAT64 prefix.
@@ -102,7 +84,51 @@ Based on above mentioned options, i have decided to use Jool but inside VYOS. I 
 
 ### VYOS NAT64 configuration
 Even though i have sevral diffrent VYOS routers in my network, i have decided to setup a new router for this purpose. I am mainly doing this for seperation of functions, and because any excuse to complicate my home networks routing is a good one.
+
+To start out with, i am only building one router, but i might add redundancy in the future
+
 I will be using the following configuration:
 ```
+# Set the IPv4 external address, in my case i just use DHCP
+set interfaces ethernet eth0 address dhcp
 
+# Setup a loopback IP for mgmt
+set interfaces loopback lo address 3fff::64:a/128
+
+# Set the IPv6 address
+set interfaces ethernet eth0 address 3fff:64:ff9b::b/64
+
+# Setup routing, in my case this router will be part of my ASN AS201911. Using a private ASN, or static routing is absolutly also an option.
+set policy prefix-list6 ANY6 rule 1 prefix ::/0
+set policy prefix-list6 ANY6 rule 1 ge 0
+set policy prefix-list6 ANY6 rule 1 action permit
+
+set policy prefix-list6 EXPORT rule 1 action permit
+set policy prefix-list6 EXPORT rule 1 prefix 3fff::64:a/128
+set policy prefix-list6 EXPORT rule 2 action permit
+set policy prefix-list6 EXPORT rule 2 prefix 64:ff9b::/96
+
+set protocols bgp system-as 201911
+set protocols bgp peer-group INTERNAL remote-as 201911
+set protocols bgp peer-group INTERNAL address-family ipv6-unicast
+set protocols bgp peer-group INTERNAL address-family ipv6-unicast prefix-list export EXPORT
+set protocols bgp peer-group INTERNAL address-family ipv6-unicast prefix-list import ANY6
+set protocols bgp address-family ipv6-unicast redistribute connected
+set protocols bgp address-family ipv6-unicast redistribute static
+set protocols bgp address-family ipv6-unicast network 64:ff9b::/96
+
+set protocols bgp neighbor 3fff:64:ff9b::a peer-group INTERNAL
+
+# Configure NAT64
+set nat64 source rule 100 source prefix '64:ff9b::/96'
+set nat64 source rule 100 translation pool 1 address 100.127.255.1
+set nat64 source rule 100 translation pool 1 port '2000-65000'
+
+# NAT64 really wants a static ip, but since i want to configure my interface as DHCP, i am creating an internal interface and NAT44'ing that interface.
+set interfaces dummy dum0 description VIRTUAL_NAT64_OUTSIDE
+set interfaces dummy dum0 address 100.127.255.1/24
+
+set nat source rule 100 outbound-interface name 'eth0'
+set nat source rule 100 source address '100.127.255.0/24'
+set nat source rule 100 translation address 'masquerade'
 ```
