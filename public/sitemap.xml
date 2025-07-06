@@ -2,26 +2,29 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>http://localhost:1313/posts/ipv6-mostly-home-intro/</loc>
+    <lastmod>2025-07-05T22:56:45+02:00</lastmod>
+  </url><url>
     <loc>http://localhost:1313/</loc>
+    <lastmod>2025-07-05T22:56:45+02:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/home-network/</loc>
+    <lastmod>2025-07-05T22:56:45+02:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/homelab/</loc>
+    <lastmod>2025-07-05T22:56:45+02:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/ipv6/</loc>
+    <lastmod>2025-07-05T22:56:45+02:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/nat64/</loc>
     <lastmod>2025-07-05T22:56:45+02:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/posts/</loc>
     <lastmod>2025-07-05T22:56:45+02:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/example/</loc>
-    <lastmod>2022-12-09T19:53:33+05:30</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/markdown-syntax/</loc>
-    <lastmod>2022-12-09T19:53:33+05:30</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/mathjax/</loc>
-    <lastmod>2022-12-09T19:53:33+05:30</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/posts/my-first-post/</loc>
-    <lastmod>2022-12-09T19:53:33+05:30</lastmod>
-  </url><url>
     <loc>http://localhost:1313/tags/</loc>
-    <lastmod>2022-12-09T19:53:33+05:30</lastmod>
+    <lastmod>2025-07-05T22:56:45+02:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/categories/</loc>
   </url>

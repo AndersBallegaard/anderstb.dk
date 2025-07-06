@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>A Glimpse into the Future: An introduction to IPv6 in your homelab on Anders Ballegaard</title>
+    <link>http://localhost:1313/posts/ipv6-mostly-home-intro-copy/</link>
+    <description>Recent content in A Glimpse into the Future: An introduction to IPv6 in your homelab on Anders Ballegaard</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate></lastBuildDate>
+    <atom:link href="http://localhost:1313/posts/ipv6-mostly-home-intro-copy/index.xml" rel="self" type="application/rss+xml" />
+  </channel>
+</rss>

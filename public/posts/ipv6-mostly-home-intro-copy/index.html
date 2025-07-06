@@ -42,23 +42,24 @@
           gtag('config', 'G-NXN60TES0F');
         }
       </script>
-<meta property="og:url" content="http://localhost:1313/posts/my-first-post/">
+<meta property="og:url" content="http://localhost:1313/posts/ipv6-mostly-home-intro-copy/">
   <meta property="og:site_name" content="Anders Ballegaard">
-  <meta property="og:title" content="Sample page">
-  <meta property="og:description" content="A sample page for the blog section">
+  <meta property="og:title" content="A Glimpse into the Future: An introduction to IPv6 in your homelab">
+  <meta property="og:description" content="The start of a series of posts related to building an ipv6 mostly home network and lab">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2022-12-09T19:53:33+05:30">
-    <meta property="article:modified_time" content="2022-12-09T19:53:33+05:30">
-    <meta property="article:tag" content="Markdown Syntax">
-    <meta property="article:tag" content="Mathjax">
-    <meta property="article:tag" content="Example">
+    <meta property="article:published_time" content="2025-07-05T22:56:45+02:00">
+    <meta property="article:modified_time" content="2025-07-05T22:56:45+02:00">
+    <meta property="article:tag" content="IPv6">
+    <meta property="article:tag" content="NAT64">
+    <meta property="article:tag" content="Homelab">
+    <meta property="article:tag" content="Home Network">
 
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Sample page">
-  <meta name="twitter:description" content="A sample page for the blog section">
+  <meta name="twitter:title" content="A Glimpse into the Future: An introduction to IPv6 in your homelab">
+  <meta name="twitter:description" content="The start of a series of posts related to building an ipv6 mostly home network and lab">
 
 
 <link rel="stylesheet" href="/bootstrap-5/css/bootstrap.min.css" media="all"><link rel="stylesheet" href="/css/header.css" media="all">
@@ -122,7 +123,7 @@
 
 
 
-<meta name="description" content="A sample page for the blog section">
+<meta name="description" content="The start of a series of posts related to building an ipv6 mostly home network and lab">
 <link rel="stylesheet" href="/css/single.css">
 
 
@@ -133,7 +134,7 @@
   
 
   <title>
-Sample page | Anders Ballegaard
+A Glimpse into the Future: An introduction to IPv6 in your homelab | Anders Ballegaard
 
   </title>
 </head>
@@ -317,13 +318,13 @@ Sample page | Anders Ballegaard
       <div class="col-sm-12 col-md-12 col-lg-9">
         <div class="pr-lg-4">
           <div class="title mb-5">
-            <h1 class="text-center mb-4">Sample page</h1>
+            <h1 class="text-center mb-4">A Glimpse into the Future: An introduction to IPv6 in your homelab</h1>
             <div class="text-center">
               
-                Fiktisious author
+                Anders Ballegaard
                 <small>|</small>
               
-              Dec 9, 2022
+              Jul 5, 2025
 
               
               <span id="readingTime">
@@ -333,15 +334,95 @@ Sample page | Anders Ballegaard
             </div>
           </div>
           
-          <div class="featured-image">
-            <img class="img-fluid mx-auto d-block" src="/images/network.png" alt="Sample page">
-          </div>
-          
           <article class="page-content  p-2">
-          <h1 id="blog-post-1">Blog post 1</h1>
-<h2 id="mathjax">Mathjax</h2>
-<p>this content is filler</p>
-<pre tabindex="0"><code></code></pre>
+          <h1 id="introduction">Introduction</h1>
+<p>I have been a big supporter of ipv6 for a long time. IPv6 has been a big part of my homelab for years, and as part of my work at a major Danish ISP, I have also helped enabling and improving ipv6 for many Danish broadband customers.</p>
+<p>I am currently working on updating and fixing some things in my homelab, and I thought i would write about it here. Partly as documentation for myself, but also as an introduction for anyone curious about how to start on thier own ipv6 homelab journey.</p>
+<p>But why should you care about ipv6? well let&rsquo;s look at how ipv6 is used today.</p>
+<p>First of all nearly half of all internet traffic is ipv6, the numbers varrys a bit but here are the numbers from Google and Meta as of writing</p>
+<p><img src="/images/content/ipv6-series/google-stats.png" alt="google ipv6 stats">
+<a href="https://www.google.com/intl/en/ipv6/statistics.html">Source</a>
+<img src="/images/content/ipv6-series/meta-stats.png" alt="meta ipv6 stats">
+<a href="https://www.facebook.com/ipv6/?tab=ipv6_total_adoption">Source</a></p>
+<p>Besides the fact that a large portion of the internet is already using IPv6, there are also pushes from both companies and goverments to move to ipv6. Some of those major pushes include:</p>
+<ul>
+<li>Apple requires all app store apps to support working in ipv6 only networks. They have required this since 2016.</li>
+<li>Sevral mobile operators have have deployed ipv6 only mobile networks with 464XLAT being the only way of accessing ipv4 sites. In the west the most notable example is probably T-Mobile in the US. But to my knowlage this aproach is also common in developing countries due to ipv4 scarcity.</li>
+<li>US Office of Management and Budget ipv6 mandate. In 2023 the US federal government presented a quite ambisious plan for moving to ipv6.</li>
+<li>China have mandated that Chinese router manufacturers must enable ipv6 by default in all new routers they sell.</li>
+<li>Most major cloud providers have started not including public ipv4 addresses for free, thus adding an extra cost for still running ipv4 to the server directly. While this doesn&rsquo;t force organizations to change, it is a nudge that can be used as a motivator.</li>
+</ul>
+<p>Ofcourse companies and goverments isn&rsquo;t just pusing for ipv6 for no reason at all. It takes a lot of effort to change, so there needs to be some good reasons behind the change. So here are some of the reasons:</p>
+<ul>
+<li>We are running out of IPv4 Address space. Part of this problem is related to the fact that early ipv4 allocation was made in a very short sighted way, but unfortunately there is not really a way to change this. (and no Class E or redefining 127.0.0.0/8 won&rsquo;t work). Unlike a lot of ipv6 supporters, I don&rsquo;t like to say we have run out, but instead say we are running out. While it is right that getting new ipv4 space directly from your RIR is imposible (or close to it), there is still healthy resale market. So you CAN get ipv4 space, but supply and demand makes a pure ipv4 only internet an impossibility now due to the amount of things we want connected.</li>
+<li>Simpler routing, and simpler network operations. This might sound counterintuitive for anyone who have grown up with ipv4 networks, and I do admit, it takes some time getting used to. But once you see the beuty in always using /64 netmasks, without having to worry about exsation, or when you start to apreciate the simplicity of not dealing with NAT when troubleshooting, or realize the simplicity of the (base) ipv6 header compared to ipv6. Like all things there is a learning curve, and the more time you have spent with ipv4 the harder it probably is, but the more you use ipv6, the easier it becomes, and the more you will love it.</li>
+<li>Decreased latency. I will admit this is not a universal truth, but removing NAT on the internet, does decrease latency, especially if your ISP is forcing you though CGNAT routers placed outside the optimal network path. In some cases we also see a decreased latency due to cutting out legacy infrastructure that only support IPv4.</li>
+<li>Energy efficiency. Kinda the same as latency, removing NAT removes compute cycles to do NAT, and decreases power consumption.</li>
+<li>Protocol improvements. Ok now we are getting nerdy, and some of these have not been realized to the point they should be yet, but here are some of my favorite protocol improvements:
+<ul>
+<li>Extention headers. This is the feature enabling most of the protocol improvements, but on older hardware it is also a source of fustration.</li>
+<li>Routing header - This allows the source device to specify the path it wants to take through the network. A very cool application of this is SRv6 routing.</li>
+<li>IPSEC header - This allows for encryption and authentication of packets built directly into the IP protocol, instead of as an additional layer like it is in IPv4.</li>
+</ul>
+</li>
+</ul>
+<p>So as I hope you agree, no matter if you are building networks, or building the apps on top of the networks, you need to understand how to work with ipv6. I belive experimentation is the best way to learn about a new technology, this is why i would highly encourage you to include ipv6 in your labs.</p>
+<p>If it sounds interesting then keep reading this, and future blog posts where we are diving into the details of some of these topics.</p>
+<h1 id="ipv6-mostly-vs-ipv6-only">IPv6 Mostly vs IPv6 only</h1>
+<p>It&rsquo;s probably important to start out defining what i am trying to achive, and what some common terms mean.</p>
+<h2 id="ipv6-only">IPv6 Only</h2>
+<p>This is pretty staight forward, it means that you ONLY have access to an ipv6 network. Unless you understand your devices and applications very well, this is probably not a good idea right now.</p>
+<p>IPv6 only is ofcourse the ultimate goal, but we aren&rsquo;t there yet. So instead most networks are targeting ipv6 mostly as a stepping stone.</p>
+<p>Ipv4 connectivity might still be provided for backwards compatibility though NAT64.</p>
+<h2 id="ipv6-mostly">IPv6 Mostly</h2>
+<p>This is accually a defined term, if you want the full version see <a href="https://datatracker.ietf.org/doc/draft-ietf-v6ops-6mops/">IETF draft-ietf-v6ops-6mops-01</a> But here is the short version:</p>
+<ul>
+<li>The network must work for IPv6 only clients, dual stack clients, and IPv4 only clients. The goal being to provide a space for migrating clients towards ipv6 only.</li>
+<li>The network must provide a NAT64 solution to the clients, notably there is no requirement for providing a DNS64 solution.</li>
+<li>The networks DHCPv4 server(s) must include DHCP option 108 in responses to clients. This indicates to hosts that support ipv6 only, that the network also supports ipv6 only. Option 108 essentially let&rsquo;s a device skip getting an IPv4 address.</li>
+</ul>
+<h2 id="so-what-am-i-choosing">So what am i choosing?</h2>
+<p>My target for now is IPv6 Mostly, for the following reasons:</p>
+<ul>
+<li>I own devices that doesn&rsquo;t support ipv6, or atleast doesn&rsquo;t support ipv6 only operations.</li>
+<li>This is the most common deployment method</li>
+<li>It doesn&rsquo;t limit me from running some devices as ipv6 only for testing purposes.</li>
+</ul>
+<h1 id="so-how-do-i-access-ipv4-only-sites">So how do i access ipv4 only sites?</h1>
+<p>The short answer is NAT64 + either DNS64 or CLAT.</p>
+<p>I will dedicate a blog post in the future to NAT64, but here is the short version of what it does. Due to IPv6 having more bits than IPv4, we can cram an ipv4 address into an ipv6 address. We traditionally use 64:ff9b::/96 for this, but there are other options. So let&rsquo;s say you wanted to access 1.1.1.1 via NAT64, instead of sending your packet to 1.1.1.1, you would send it to 64:ff9b::101:101 given that is what the address would be if you took the first 96 bits from 64:ff9b:: and added the 32 bits of 1.1.1.1.</p>
+<p>But we are (mostly) not accessing services directly by ipv4 address, so we need to map DNS to this mess, somehow. There are two ways this is done</p>
+<ul>
+<li>DNS64 - This is essentially the DNS server lying to the client, by creating a fake AAAA record though the NAT64 device if no AAAAs exist for that domain. But given the DNS server is lying to the client, DNSSEC doesn&rsquo;t like DNS64. The advantage is that it works on any device that supports IPv6. But it only works for DNS, so any IPv4 littrals won&rsquo;t be saved by this. Another indirect consequence of this approach is that sites with AAAA records, but broken ipv6 doesn&rsquo;t have any way to fall back to the ipv4 connectivity.</li>
+<li>CLAT aka 464XLAT - This works by having code on the device doing the translation, it&rsquo;s typically implemented as a new ip on an existing interface, or new interface entirely. This is very common in mobile devices, and it is (very slowly) getting implemented on desktop devices. The advantage is that this works for both DNS and IPv4 literals, and it doesn&rsquo;t involve changing DNS responses.</li>
+</ul>
+<h1 id="a-short-introduction-to-my-home-network-and-what-i-want-to-do">A short introduction to my home network, and what i want to do.</h1>
+<p>To say that my home network is weird would be an understatement. Like a lot of people working in IT, i have a sizable homelab, but unlike most others, i have decided to somewhat seperate my lab from the rest of the network. Oh and then there is the small detail that i am running my own publicly routed ASN (AS201911), and though that have a /44 ipv6 allocation.</p>
+<p>The following is a diagram from earlier this year, of how i wanted the network to look logically. Some of this isn&rsquo;t implemented, but it gives a picture of the direction i have been going
+<img src="/images/content/ipv6-series/logical-network-diagram-2025.svg" alt="Network diagram"></p>
+<p>I will fully acknowledge that best practice is a unknown concept in this rats nest of a network. But my goals have never been to create something that made sense, it&rsquo;s been to create something that gave me the flexibility i wanted to do whatever i want with limited impact on other parts of the network. Besides that i just like BGP, and wanted more BGP in my home network.</p>
+<p>I don&rsquo;t have a public IPv4 address for my home network, so everything i expose is exposed though ipv6 only, mostly with cloudflare proxy in front of the service, both to protect the service, and to enable dual stack access though cloudflares proxy service.</p>
+<p>All routers you see in the diagram is either OpnSense firewalls or VYOS routers.</p>
+<p>So what do i want to do with the network?</p>
+<ul>
+<li>Create a centralized NAT64 service. Right now the DKNIM-LFW cluster, and DKNIM-HFW clusters are both running NAT64, i would like to centralize this.</li>
+<li>Enable option 108 on all networks with DHCP. A lot should already have it, but it&rsquo;s not enabled everywhere.</li>
+<li>Explore running CLAT on linux servers.</li>
+<li>Explore options for a perment ipv6 only or dual stacked container platform.</li>
+</ul>
+<h1 id="expected-challenges">Expected challenges</h1>
+<p>Having been on this journey before, i don&rsquo;t expect everything to be smooth sailing. I kinda know what to expect, but if you are starting an IPv6 mostly journey, here are some things to be aware of.</p>
+<ul>
+<li>There are a few popular services using ipv4 littrals, most notably Discord. So if you enable option 108 on a device without CLAT, don&rsquo;t be surpriced when parts of Discord stops working.</li>
+<li>You might find that your ISP doesn&rsquo;t support ipv6, you can ofcourse solve this in the crazy person way and start your own ISP like network, or you could be more sensible, and use something like HE tunnels.</li>
+<li>IOT devices generally don&rsquo;t have great ipv6 support.</li>
+<li>If you are used to doing music streaming from your phone to maybe a Sonos speaker, that might break with option 108, given that Sonos doesn&rsquo;t support ipv6, and your phone most likely won&rsquo;t have an ipv4 address.</li>
+<li>Containers and ipv6 - Generally not a good time.</li>
+<li>Some applications you host might listen to 0.0.0.0 instead of [::] (this supports both v4 and v6), if it&rsquo;s an open source project, and you have the ability, please fix it in the project, and try to get it merged.</li>
+</ul>
+<h1 id="what-is-next">What is next?</h1>
+<p>My plan is to start looking into diffrent NAT64 options given i have been out of that game for a bit. So look forward to a post comparing different options, and detailing what i will end up doing.</p>
+
           </article>
         </div>
       </div>
@@ -355,7 +436,9 @@ Sample page | Anders Ballegaard
               <div class="toc-content">
                 <nav id="TableOfContents">
   <ul>
-    <li><a href="#mathjax">Mathjax</a></li>
+    <li><a href="#ipv6-only">IPv6 Only</a></li>
+    <li><a href="#ipv6-mostly">IPv6 Mostly</a></li>
+    <li><a href="#so-what-am-i-choosing">So what am i choosing?</a></li>
   </ul>
 </nav>
               </div>
@@ -367,17 +450,21 @@ Sample page | Anders Ballegaard
             <h5>Tags</h5>
             <ul class="tags-ul list-unstyled list-inline">
               
-              <li class="list-inline-item"><a href="http://localhost:1313/tags/markdown-syntax"
+              <li class="list-inline-item"><a href="http://localhost:1313/tags/ipv6"
                 target="_blank"
-              >Markdown syntax</a></li>
+              >IPv6</a></li>
               
-              <li class="list-inline-item"><a href="http://localhost:1313/tags/mathjax"
+              <li class="list-inline-item"><a href="http://localhost:1313/tags/nat64"
                 target="_blank"
-              >Mathjax</a></li>
+              >NAT64</a></li>
               
-              <li class="list-inline-item"><a href="http://localhost:1313/tags/example"
+              <li class="list-inline-item"><a href="http://localhost:1313/tags/homelab"
                 target="_blank"
-              >example</a></li>
+              >Homelab</a></li>
+              
+              <li class="list-inline-item"><a href="http://localhost:1313/tags/home-network"
+                target="_blank"
+              >Home network</a></li>
               
             </ul>
           </aside>
@@ -389,22 +476,22 @@ Sample page | Anders Ballegaard
             <div class="social-content">
               <ul class="list-inline">
                 <li class="list-inline-item text-center">
-                  <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url=http%3a%2f%2flocalhost%3a1313%2fposts%2fmy-first-post%2f">
+                  <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url=http%3a%2f%2flocalhost%3a1313%2fposts%2fipv6-mostly-home-intro-copy%2f">
                     <i class="fab fa-linkedin"></i>
                   </a>
                 </li>
                 <li class="list-inline-item text-center">
-                  <a target="_blank" href="https://twitter.com/share?text=Sample%20page&url=http%3a%2f%2flocalhost%3a1313%2fposts%2fmy-first-post%2f">
+                  <a target="_blank" href="https://twitter.com/share?text=A%20Glimpse%20into%20the%20Future%3a%20An%20introduction%20to%20IPv6%20in%20your%20homelab&url=http%3a%2f%2flocalhost%3a1313%2fposts%2fipv6-mostly-home-intro-copy%2f">
                     <i class="fab fa-twitter"></i>
                   </a>
                 </li>
                 <li class="list-inline-item text-center">
-                  <a target="_blank" href="https://api.whatsapp.com/send?text=Sample%20page: http%3a%2f%2flocalhost%3a1313%2fposts%2fmy-first-post%2f">
+                  <a target="_blank" href="https://api.whatsapp.com/send?text=A%20Glimpse%20into%20the%20Future%3a%20An%20introduction%20to%20IPv6%20in%20your%20homelab: http%3a%2f%2flocalhost%3a1313%2fposts%2fipv6-mostly-home-intro-copy%2f">
                     <i class="fab fa-whatsapp"></i>
                   </a>
                 </li>
                 <li class="list-inline-item text-center">
-                  <a target="_blank" href='mailto:?subject=Sample%20page&amp;body=Check%20out%20this%20site http%3a%2f%2flocalhost%3a1313%2fposts%2fmy-first-post%2f'>
+                  <a target="_blank" href='mailto:?subject=A%20Glimpse%20into%20the%20Future%3a%20An%20introduction%20to%20IPv6%20in%20your%20homelab&amp;body=Check%20out%20this%20site http%3a%2f%2flocalhost%3a1313%2fposts%2fipv6-mostly-home-intro-copy%2f'>
                     <i class="fa fa-envelope"></i>
                   </a>
                 </li>
@@ -515,33 +602,6 @@ Sample page | Anders Ballegaard
                 <div class="mt-auto card-footer">
                     <span class="float-start">July 5, 2025</span>
                     <a href="/posts/ipv6-mostly-home-intro/" class="float-end btn btn-outline-info btn-sm">Read</a>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-lg-4 col-md-6 pt-2">
-            <div class="card h-100">
-                
-                <div class="card-header">
-                    <a href="/posts/my-first-post/">
-                        <img src="/images/network.png" class="card-img-top" alt="Sample page">
-                    </a>
-                </div>
-                
-                <div class="card-body bg-transparent p-3 shadow-sm">
-                    <a href="/posts/my-first-post/" class="primary-font card-title">
-                        <h5 class="card-title bg-transparent" title="Sample page">Sample page</h5>
-                    </a>
-                    <div class="card-text secondary-font">
-                        <p><h1 id="blog-post-1">Blog post 1</h1>
-<h2 id="mathjax">Mathjax</h2>
-<p>this content is filler</p>
-<pre tabindex="0"><code></code></pre></p>
-                    </div>
-                </div>
-                <div class="mt-auto card-footer">
-                    <span class="float-start">December 9, 2022</span>
-                    <a href="/posts/my-first-post/" class="float-end btn btn-outline-info btn-sm">Read</a>
                 </div>
             </div>
         </div>

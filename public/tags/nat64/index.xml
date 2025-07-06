@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on Anders Ballegaard</title>
-    <link>http://localhost:1313/posts/</link>
-    <description>Recent content in Posts on Anders Ballegaard</description>
+    <title>NAT64 on Anders Ballegaard</title>
+    <link>http://localhost:1313/tags/nat64/</link>
+    <description>Recent content in NAT64 on Anders Ballegaard</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 05 Jul 2025 22:56:45 +0200</lastBuildDate>
-    <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/tags/nat64/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>A Glimpse into the Future: An introduction to IPv6 in your homelab</title>
       <link>http://localhost:1313/posts/ipv6-mostly-home-intro/</link>

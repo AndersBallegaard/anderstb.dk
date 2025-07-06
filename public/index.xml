@@ -6,14 +6,14 @@
     <description>Recent content on Anders Ballegaard</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 09 Dec 2022 19:53:33 +0530</lastBuildDate>
+    <lastBuildDate>Sat, 05 Jul 2025 22:56:45 +0200</lastBuildDate>
     <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Sample page</title>
-      <link>http://localhost:1313/posts/my-first-post/</link>
-      <pubDate>Fri, 09 Dec 2022 19:53:33 +0530</pubDate>
-      <guid>http://localhost:1313/posts/my-first-post/</guid>
-      <description>&lt;h1 id=&#34;blog-post-1&#34;&gt;Blog post 1&lt;/h1&gt;&#xA;&lt;h2 id=&#34;mathjax&#34;&gt;Mathjax&lt;/h2&gt;&#xA;&lt;p&gt;this content is filler&lt;/p&gt;&#xA;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;&lt;/code&gt;&lt;/pre&gt;</description>
+      <title>A Glimpse into the Future: An introduction to IPv6 in your homelab</title>
+      <link>http://localhost:1313/posts/ipv6-mostly-home-intro/</link>
+      <pubDate>Sat, 05 Jul 2025 22:56:45 +0200</pubDate>
+      <guid>http://localhost:1313/posts/ipv6-mostly-home-intro/</guid>
+      <description>&lt;p&gt;I have been a long-time advocate for IPv6. It has been a crucial part of my homelab for years, and through my work at a major Danish ISP, I&amp;rsquo;ve have among other things contributed to enabling and improving IPv6 for many Danish broadband customers.&lt;/p&gt;&#xA;&lt;p&gt;As I&amp;rsquo;m currently updating and fine-tuning some aspects of my homelab, I thought it would be a good idea to document the process here. This will serve as not only personal documentation but also an introduction for anyone interested in setting up their own IPv6 homelab.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>
