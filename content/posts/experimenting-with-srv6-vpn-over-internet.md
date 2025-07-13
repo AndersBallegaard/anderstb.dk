@@ -8,7 +8,7 @@ tags:
   - Srv6
   - Vyos
   - L3VPN
-image: /images/content/srv6-vpn/srv6-vpn.png
+image: /images/content/srv6-vpn/hero.png
 description: "The start of a series of posts related to building an ipv6 mostly home network and lab"
 toc: true
 ---

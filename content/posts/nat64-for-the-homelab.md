@@ -9,7 +9,7 @@ tags:
   - Homelab
   - Home network
   - Vyos
-image: /images/content/ipv6-series/DNS64_flow.png
+image: /images/content/ipv6-series/nat64_hero.png
 description: "An comparison of diffrent NAT64 options, and an introduction to NAT64 related concepts"
 toc: true
 ---
