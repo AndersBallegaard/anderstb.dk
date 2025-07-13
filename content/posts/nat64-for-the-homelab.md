@@ -79,56 +79,170 @@ I happen to have a fairly modern Cisco router in my lab, so I wanted to look at 
 The main pro for me is that it is something that is more likely to see in a production network. Obivoiusly when running a production network, vendor support is a very important component. It also seems very easy to configure, and i am sure it would work fine. 
 A drawback for me is power consumption. I currently don't have any other reason to run that router 24/7, so locating NAT64 on it, would add a new source of power draw to my homelab.
 
+
 ## My setup
-Based on above mentioned options, i have decided to use Jool but inside VYOS. I have also decided to use DNS64 given that the majority of my devices doesn't have a built in CLAT implementation.
+Based on above mentioned options, i have decided to use Jool. The performance is defendly nice, but besides that I just wanted to try something new. As mentioned, I have experince with Tayga, but what's the point in having a homelab if you don't try something new and have fun with it. 
 
-### VYOS NAT64 configuration
-Even though i have sevral diffrent VYOS routers in my network, i have decided to setup a new router for this purpose. I am mainly doing this for seperation of functions, and because any excuse to complicate my home networks routing is a good one.
+### Setting up Jool on Ubuntu 24.04 LTS
+First start out with a clean ubuntu machine, given that Jool runs as a kernel module, I would highly recormend going with a full VM, instead of trying to make this work on an LXC container. This does not require a lot of resources I have speced mine with 1G of RAM and 1 Core. This seems to be enough for my needs.
 
-To start out with, i am only building one router, but i might add redundancy in the future
 
-I will be using the following configuration:
+#### Installing Jool
+In theroy installing Jool on Ubuntu should be very easy, it is included in the default APT repository, so all you should need to do is install it from there. 
+```bash
+# Update package repo
+sudo apt update
+
+# Install Jool
+sudo apt install jool-dkms jool-tools -y
 ```
-# Set the IPv4 external address, in my case i just use DHCP
-set interfaces ethernet eth0 address dhcp
 
-# Setup a loopback IP for mgmt
-set interfaces loopback lo address 3fff::64:a/128
+I would recormend you try the above mentioned route, but as of writing, it doesn't work. The version of Jool in the repo is too old, and does not support the current kernel version for Ubuntu 24.04 LTS. So here is the manuel way
+```bash
+# Find the newest versions here: https://github.com/NICMx/Jool/releases
 
-# Set the IPv6 address
-set interfaces ethernet eth0 address 3fff:64:ff9b::b/64
+# Download kernel module and tools
+wget https://github.com/NICMx/Jool/releases/download/v4.1.14/jool-dkms_4.1.14-1_all.deb
 
-# Setup routing, in my case this router will be part of my ASN AS201911. Using a private ASN, or static routing is absolutly also an option.
-set policy prefix-list6 ANY6 rule 1 prefix ::/0
-set policy prefix-list6 ANY6 rule 1 ge 0
-set policy prefix-list6 ANY6 rule 1 action permit
+wget https://github.com/NICMx/Jool/releases/download/v4.1.14/jool-dkms_4.1.14-1_all.deb 
 
-set policy prefix-list6 EXPORT rule 1 action permit
-set policy prefix-list6 EXPORT rule 1 prefix 3fff::64:a/128
-set policy prefix-list6 EXPORT rule 2 action permit
-set policy prefix-list6 EXPORT rule 2 prefix 64:ff9b::/96
+# Install kernel headers
+apt install linux-headers-$(uname -r)
 
-set protocols bgp system-as 201911
-set protocols bgp peer-group INTERNAL remote-as 201911
-set protocols bgp peer-group INTERNAL address-family ipv6-unicast
-set protocols bgp peer-group INTERNAL address-family ipv6-unicast prefix-list export EXPORT
-set protocols bgp peer-group INTERNAL address-family ipv6-unicast prefix-list import ANY6
-set protocols bgp address-family ipv6-unicast redistribute connected
-set protocols bgp address-family ipv6-unicast redistribute static
-set protocols bgp address-family ipv6-unicast network 64:ff9b::/96
-
-set protocols bgp neighbor 3fff:64:ff9b::a peer-group INTERNAL
-
-# Configure NAT64
-set nat64 source rule 100 source prefix '64:ff9b::/96'
-set nat64 source rule 100 translation pool 1 address 100.127.255.1
-set nat64 source rule 100 translation pool 1 port '2000-65000'
-
-# NAT64 really wants a static ip, but since i want to configure my interface as DHCP, i am creating an internal interface and NAT44'ing that interface.
-set interfaces dummy dum0 description VIRTUAL_NAT64_OUTSIDE
-set interfaces dummy dum0 address 100.127.255.1/24
-
-set nat source rule 100 outbound-interface name 'eth0'
-set nat source rule 100 source address '100.127.255.0/24'
-set nat source rule 100 translation address 'masquerade'
+# Install the packages
+sudo dpkg -i jool-*.deb
 ```
+
+Given that Jool runs as a kernel module, we need to load it. This example both loads it now, and makes the change persistant. But I would recormend rebooting your machine after this step, just to make sure the persistance works.
+```bash
+# Add Jool to list of modules loaded
+sudo su -c "echo jool > /etc/modules-load.d/jool.conf"
+
+# Restart systemd's load modules service
+sudo systemctl restart systemd-modules-load
+
+# Verify the module has been loaded
+lsmod | grep jool
+jool                   16384  0
+jool_common           319488  1 jool
+nf_defrag_ipv6         24576  1 jool
+nf_defrag_ipv4         12288  1 jool
+x_tables               65536  2 jool,ip_tables
+
+```
+
+#### Creating a service
+Now let's create a service file for Jool to start on bootup. I have created a file called /etc/systemd/system/jool.service with the following content:
+```bash
+[Unit]
+Description=Jool NAT64
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/jool instance add --netfilter --pool6 64:ff9b::/96
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Let's enable and start the service:
+```bash
+# Reload services
+sudo systemctl daemon-reload
+
+# Enable the service
+sudo systemctl enable --now jool.service
+
+# Verify the service is running
+sudo systemctl status jool.service
+```
+
+#### Verifying Jool
+We can verify that the service is working correctly by checking the known instances and status of Jool:
+```bash
+# List known instances
+sudo jool instance display
+
+# Verify Jool is running
+sudo jool instance status
+
+# Show Jool global config
+sudo jool global display
+
+
+```
+
+#### Routing
+Given this guide assumes the NAT64 router is outside the normal path of traffic, we need to route the NAT64 prefix towards the machine. You can achive this in multiple ways, but the most obivious would be BGP or static routing. For simplicity I have decided to use Static routing.
+
+I unfortunly can't tell you exactly how to configure this routing, due to it being slightly diffrent on each router OS. But here is an example from Vyos:
+```bash
+set protocols static route6 64:ff9b::/96 next-hop <Your machines IP>
+```
+
+#### Final verification of Jool
+Let's try running some traffic through the NAT64 router and see if it works. To start out with, let's use ping to test this.
+```bash
+# From a host on the Lan side NOT THE NAT64 ROUTER ITSELF, ping 1.1.1.1 though the nat64 prefix.
+➜  ~ ping 64:ff9b::1.1.1.1 
+PING 64:ff9b::1.1.1.1(64:ff9b::101:101) 56 data bytes
+64 bytes from 64:ff9b::101:101: icmp_seq=1 ttl=51 time=5.67 ms
+64 bytes from 64:ff9b::101:101: icmp_seq=2 ttl=51 time=6.71 ms
+64 bytes from 64:ff9b::101:101: icmp_seq=3 ttl=51 time=7.13 ms
+64 bytes from 64:ff9b::101:101: icmp_seq=4 ttl=51 time=8.18 ms
+
+```
+
+### Adding DNS64
+While some hosts might automaticly discover the NAT64 router, it is unlikely. Therefore we need a DNS64 server. 
+This might be something i built in the future, but for now i will just use a publicly avalible one. These servers assume you use 64:ff9b::/96 as your NAT64 prefix, so this is not an option if you are using a different prefix.
+
+Here is a list of some public DNS64 servers:
+| Name | Address |
+| --- | --- |
+| Google - Primary | 2001:4860:4860::6464 |
+| Google - Secondary | 2001:4860:4860::64 |
+| Cloudflare - Primary | 2606:4700:4700::64 |
+| Cloudflare - Secondary | 2606:4700:4700::6400 |
+
+I will be using Cloudflares in my network.
+
+Again, this step depends on what router you are using (and your address alocation techniques). But you want to either update your router advertisements, or DHCPv6 to announce two DNS64 servers.
+
+Once you have done that, you can use curl to test that it works
+```bash
+➜  ~ curl -6 -v v4.ipv6test.app
+
+*   Trying 64:ff9b::12ad:57b:80...
+* Connected to v4.ipv6test.app (64:ff9b::12ad:57b) port 80 (#0)
+> GET / HTTP/1.1
+> Host: v4.ipv6test.app
+> User-Agent: curl/7.81.0
+> Accept: */*
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< Server: CloudFront
+< Date: Sun, 13 Jul 2025 15:57:01 GMT
+< Content-Type: text/plain
+< Content-Length: 13
+< Connection: keep-alive
+< Cache-Control: no-store
+< X-Cache: FunctionGeneratedResponse from cloudfront
+< Via: 1.1 acf2dd107c5d6d9bebe3457b4f66431e.cloudfront.net (CloudFront)
+< X-Amz-Cf-Pop: CPH50-P1
+< Alt-Svc: h3=":443"; ma=86400
+< X-Amz-Cf-Id: EnXaGh0GuNnz9vjirNdrCtDnTTj5grn7vGoMJiJJu3CE9rdNIYxlpQ==
+< X-XSS-Protection: 1; mode=block
+< Referrer-Policy: no-referrer
+< Content-Security-Policy: script-src 'self'; frame-ancestors 'none'
+< X-Content-Type-Options: nosniff
+< Permissions-Policy: geolocation=()
+< 
+* Connection #0 to host v4.ipv6test.app left intact
+y.z.x.c%  
+```
+As you can see in the top, this Ipv4 only site is accessed over ipv6 though NAT64. At the bottom we can see an IPv4 address (redacted), this is Jools outside address (or atleasted NAT'ed) outside address. So from the perspective of the server, we are an ipv4 client. But we are really using IPv6 on our end. This is exactly what we wanted to see.
+
+## Conclusion
+This post has been a bit long and I hope you enjoyed it as much as I did writing it. We have covered what NAT64 is, what deployment options we have, and how to deploy it. I hope this will help you in your homelab journey, and hope you take the time to deploy ipv6 mostly in your own network. IPv6 is the future, and way too few people understand it yet.

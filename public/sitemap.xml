@@ -8,7 +8,22 @@
     <loc>http://localhost:1313/posts/experimenting-with-srv6-vpn-over-internet/</loc>
     <lastmod>2025-07-06T12:51:45+02:00</lastmod>
   </url><url>
+    <loc>http://localhost:1313/tags/ipv6/</loc>
+    <lastmod>2025-07-06T12:51:45+02:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/l3vpn/</loc>
+    <lastmod>2025-07-06T12:51:45+02:00</lastmod>
+  </url><url>
     <loc>http://localhost:1313/posts/</loc>
+    <lastmod>2025-07-06T12:51:45+02:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/srv6/</loc>
+    <lastmod>2025-07-06T12:51:45+02:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/</loc>
+    <lastmod>2025-07-06T12:51:45+02:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/vyos/</loc>
     <lastmod>2025-07-06T12:51:45+02:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/home-network/</loc>
@@ -17,19 +32,10 @@
     <loc>http://localhost:1313/tags/homelab/</loc>
     <lastmod>2025-07-06T09:05:08+02:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/ipv6/</loc>
-    <lastmod>2025-07-06T09:05:08+02:00</lastmod>
-  </url><url>
     <loc>http://localhost:1313/tags/nat64/</loc>
     <lastmod>2025-07-06T09:05:08+02:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/posts/nat64-for-the-homelab/</loc>
-    <lastmod>2025-07-06T09:05:08+02:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/</loc>
-    <lastmod>2025-07-06T09:05:08+02:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/vyos/</loc>
     <lastmod>2025-07-06T09:05:08+02:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/posts/ipv6-mostly-home-intro/</loc>
