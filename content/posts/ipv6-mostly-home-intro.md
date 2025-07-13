@@ -9,7 +9,7 @@ tags:
   - Homelab
   - Home network
 image: /images/content/intro-homelab-v6-hero.png
-description: "The start of a series of posts related to building an ipv6 mostly home network and lab"
+description: "Intersted in IPv6? This is the gateway into a series of posts on how to build an IPv6 Mostly homelab network. This post mostly covers the Why, What and what my plan is."
 toc: true
 ---
 ## Why Should IPv6 be a part of a homelab?

@@ -9,7 +9,7 @@ tags:
   - Vyos
   - L3VPN
 image: /images/content/srv6-vpn/hero.png
-description: "The start of a series of posts related to building an ipv6 mostly home network and lab"
+description: "Diving in to the world of SRv6 VPNs, specificly over the Internet, an introduction to the concept, posibilities, and how to set it up on VyOS"
 toc: true
 ---
 Ever since learning about SRv6, I have been interested in testing how SRv6-based VPN services work, especially over an uncontrolled network like the Internet. I happened to have some time and energy to play around with it. This post doesn't describe a production-ready setup; it's just some notes from playing around and figuring out what is possible, how it works, and getting some ideas for future tinkering.

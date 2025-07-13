@@ -10,7 +10,7 @@ tags:
   - Home network
   - Vyos
 image: /images/content/ipv6-series/nat64_hero.png
-description: "An comparison of diffrent NAT64 options, and an introduction to NAT64 related concepts"
+description: "How to get started with NAT64 in your lab, including a comparison of diffrent NAT64 options, install guide for Jool, and an introduction to DNS64, 464XLAT, etc"
 toc: true
 ---
 
