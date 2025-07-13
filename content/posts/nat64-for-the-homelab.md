@@ -1,5 +1,5 @@
 ---
-date: '2025-07-06T09:05:08+02:00'
+date: '2025-07-13T09:05:08+02:00'
 draft: false
 title: 'NAT64 for the Homelab'
 author: "Anders Ballegaard"

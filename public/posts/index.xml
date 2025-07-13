@@ -6,21 +6,21 @@
     <description>Recent content in Posts on Anders Ballegaard</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 06 Jul 2025 12:51:45 +0200</lastBuildDate>
+    <lastBuildDate>Sun, 13 Jul 2025 09:05:08 +0200</lastBuildDate>
     <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>NAT64 for the Homelab</title>
+      <link>http://localhost:1313/posts/nat64-for-the-homelab/</link>
+      <pubDate>Sun, 13 Jul 2025 09:05:08 +0200</pubDate>
+      <guid>http://localhost:1313/posts/nat64-for-the-homelab/</guid>
+      <description>&lt;p&gt;As discussed in &lt;em&gt;&lt;strong&gt;&lt;a href=&#34;http://localhost:1313/posts/ipv6-mostly-home-intro/&#34;&gt;the previous post&lt;/a&gt;&lt;/strong&gt;&lt;/em&gt;, I am currently making some modifications to my homelab. As a part of this process, I am looking at NAT64 solutions again. I am currently running Tayga on OpnSense, but want to move to NAT64 with a dedicated VM. This post will be going through what NAT64 is, how clients interact with it, a comparison of different implementations and finally setting up my chosen implementation.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Experimenting With Srv6 VPN services Over The Internet</title>
       <link>http://localhost:1313/posts/experimenting-with-srv6-vpn-over-internet/</link>
       <pubDate>Sun, 06 Jul 2025 12:51:45 +0200</pubDate>
       <guid>http://localhost:1313/posts/experimenting-with-srv6-vpn-over-internet/</guid>
       <description>&lt;p&gt;Ever since learning about SRv6, I have been interested in testing how SRv6-based VPN services work, especially over an uncontrolled network like the Internet. I happened to have some time and energy to play around with it. This post doesn&amp;rsquo;t describe a production-ready setup; it&amp;rsquo;s just some notes from playing around and figuring out what is possible, how it works, and getting some ideas for future tinkering.&lt;/p&gt;&#xA;&lt;h2 id=&#34;what-is-segment-routing-and-srv6&#34;&gt;What is Segment routing and SRv6?&lt;/h2&gt;&#xA;&lt;p&gt;Segment routing is a modern approach to directing traffic. It works over either IPv6 or MPLS, and has many interesting features related to redundancy, traffic engineering, and services.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>NAT64 for the Homelab</title>
-      <link>http://localhost:1313/posts/nat64-for-the-homelab/</link>
-      <pubDate>Sun, 06 Jul 2025 09:05:08 +0200</pubDate>
-      <guid>http://localhost:1313/posts/nat64-for-the-homelab/</guid>
-      <description>&lt;p&gt;As discussed in &lt;em&gt;&lt;strong&gt;&lt;a href=&#34;http://localhost:1313/posts/ipv6-mostly-home-intro/&#34;&gt;the previous post&lt;/a&gt;&lt;/strong&gt;&lt;/em&gt;, I am currently making some modifications to my homelab. As a part of this process, I am looking at NAT64 solutions again. I am currently running Tayga on OpnSense, but want to move to NAT64 with a dedicated VM. This post will be going through what NAT64 is, how clients interact with it, a comparison of different implementations and finally setting up my chosen implementation.&lt;/p&gt;</description>
     </item>
     <item>
       <title>A Glimpse into the Future: An introduction to IPv6 in your homelab</title>
