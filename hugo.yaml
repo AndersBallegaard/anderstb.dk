@@ -204,9 +204,9 @@ params:
     enable: true
     # title: "Custom Name"
     items:
-      - title: 350-501 SPCOR
-        content: The core exam in the CCNP Service provider track. This exam covers a wide range of topics related to Ciscos service provider networking offerings. Yes, i am planning to take a concentration exam to get the full CCNP SP
-        image: /images/cisco-specialist.png
+      - title: CCNP Service provider
+        content: Cisco CCNP Service provider, covers topics related to service provider networking, I took the SPAUTO concentration exam, along with the SPCOR Exam, to focus on Service provider automation.
+        image: /images/ccnp-sp.png
       - title: Devnet associate
         content: Ciscos DevNet Associate exam covers automation and programibility accross all of ciscos product domains. While not particularly deep on any single topic it aims to verify core knowledge for automation practisioners.
         url: https://www.credly.com/badges/09275761-d262-4891-bb00-3f1b568b270c
